@@ -11,12 +11,16 @@ module.exports = class {
     startDev() {
         process.env.NODE_ENV = 'development'
         const webpackConfig = getWebpackConfig(this.config)
+        dev({
+            webpackConfig
+        })
     }
 
     // 开启build 服务
     startBuild() {
         process.env.NODE_ENV = 'production'
         const webpackConfig = getWebpackConfig(this.config)
+        // console.log(webpackConfig.module.rules[0]);
         build({
             webpackConfig,
             cwd: this.config.cwd,

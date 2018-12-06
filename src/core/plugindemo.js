@@ -4,6 +4,6 @@ module.exports = ({build, core, deploy}) => {
         build.setEntry(path.resolve(process.cwd(), "./demo/index.js"))
         build.setOutputPath(path.resolve(process.cwd(), "./dist"))
         build.setHash(true)
-        build.startBuild()
+        build.startDev()
     });
 }

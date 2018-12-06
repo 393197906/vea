@@ -3,6 +3,7 @@ const {join} = require('path')
 
 module.exports = function (webpackConfig, opts) {
     webpackConfig
+        .mode('development')
         .devtool(opts.devtool || 'cheap-module-source-map')
         .output.pathinfo(true);
 

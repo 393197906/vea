@@ -38,6 +38,12 @@ module.exports = getBaseConfig = (opts) => {
             return relative(opts.cwd, info.absoluteResourcePath).replace(/\\/g, '/');
         });
 
+    // plugins -> html
+    webpackConfig.plugin('htmlejs').use(require('html-webpack-plugin'), [
+        {
+            template: join(cwd, "index.ejs")
+        }
+    ]);
 
     webpackConfig.resolve
     // 不能设为 false，因为 tnpm 是通过 link 处理依赖，设为 false tnpm 下会有大量的冗余模块
@@ -88,6 +94,7 @@ module.exports = getBaseConfig = (opts) => {
     // module -> exclude
     const rule = webpackConfig.module
         .rule('exclude')
+        .test(/\.(png|jpe?g|gif|svg | woff2?|eot|ttf|otf)(\?.*)?$/)
         .exclude.add(/\.json$/)
         .add(/\.(js|jsx|ts|tsx|mjs|wasm|vue)$/)
         .add(/\.(css|less|scss|sass)$/);
@@ -101,6 +108,8 @@ module.exports = getBaseConfig = (opts) => {
             name: 'static/[name].[hash:8].[ext]',
         });
 
+
+    // babel
     const babelOptsCommon = {
         cacheDirectory: true, // enable by default
         babelrc: false, // disable by default
@@ -189,6 +198,7 @@ module.exports = getBaseConfig = (opts) => {
         },
     ]);
 
+
     // plugins -> copy
     if (existsSync(join(opts.cwd, 'public'))) {
         webpackConfig.plugin('copy-public').use(require('copy-webpack-plugin'), [
@@ -229,7 +239,6 @@ module.exports = getBaseConfig = (opts) => {
     if (opts.externals) {
         webpackConfig.externals(opts.externals);
     }
-
     // node
     webpackConfig.node.merge({
         setImmediate: false,
@@ -240,6 +249,8 @@ module.exports = getBaseConfig = (opts) => {
         tls: 'empty',
         child_process: 'empty',
     });
+
+
     if (isDev) {
         require('./dev')(webpackConfig, opts);
     } else {

@@ -28,7 +28,8 @@ module.exports = class veaBuild {
             cssModulesExcludes: undefined, // cssModulesExcludes
             externals: undefined,
             devtool: "", // devtool
-            manifest: false
+            manifest: false,
+            devServer: undefined
         }
     }
 
@@ -172,10 +173,15 @@ module.exports = class veaBuild {
 
     // set devtool
     setManifest(manifest) {
-        assert(_.isPlainObject(manifest), "manifest 必须是一个字符串");
+        assert(_.isPlainObject(manifest), "manifest 必须是一个对象");
         this.config.manifest = manifest
     }
 
+    // set devServer
+    setDevServer(devServer) {
+        assert(_.isPlainObject(devServer), "devServer 必须是一个对象");
+        this.config.devServer = devServer
+    }
 
     // 开启dev
     startDev() {
