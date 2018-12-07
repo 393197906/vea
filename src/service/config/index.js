@@ -38,12 +38,24 @@ module.exports = getBaseConfig = (opts) => {
             return relative(opts.cwd, info.absoluteResourcePath).replace(/\\/g, '/');
         });
 
+    // 挂载自定义插件
+    if (opts.extraWebpackPlugins) {
+        opts.extraWebpackPlugins.forEach((item, index) => {
+            const [path = "", opts = []] = item
+            webpackConfig.plugin(`extraWebpackPlugins${index}`).use(require(path), opts);
+        })
+    }
+
     // plugins -> html
-    webpackConfig.plugin('htmlejs').use(require('html-webpack-plugin'), [
-        {
-            template: join(cwd, "index.ejs")
-        }
-    ]);
+    if (existsSync(join(process.cwd(), "public/index.html")) || opts.htmlTemplate) {
+        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) : join(process.cwd(), "public/index.html")
+        webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
+            {
+                template
+            }
+        ]);
+    }
+
 
     webpackConfig.resolve
     // 不能设为 false，因为 tnpm 是通过 link 处理依赖，设为 false tnpm 下会有大量的冗余模块

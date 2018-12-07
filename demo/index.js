@@ -1,6 +1,10 @@
-import test from "./test"
-import png from "./img/50.png"
+import Vue from "vue"
+import Test from "./Test"
 
-alert(11)
-alert(222)
-test()
+new Vue({
+    created() {
+        alert(11)
+    },
+    components: {Test},
+    template: '<Test/>'
+}).$mount('#app')

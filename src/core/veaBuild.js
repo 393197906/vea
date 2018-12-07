@@ -22,6 +22,7 @@ module.exports = class veaBuild extends event {
             browserslist: undefined, // 浏览器列表
             disableCSSModules: false, // 关闭 css modules
             extraPostCSSPlugins: undefined, // 扩展 postcss
+            extraWebpackPlugins: undefined, // 扩展webpack 插件
             cssnano: undefined, // 设置cssnono
             cssLoaderOptions: undefined, // cssLoaderOptions
             lessLoaderOptions: undefined, //lessLoaderOptions
@@ -30,8 +31,16 @@ module.exports = class veaBuild extends event {
             externals: undefined,
             devtool: "", // devtool
             manifest: false,
-            devServer: undefined
+            devServer: undefined,
+            // html
+            htmlTemplate: undefined
         }
+    }
+
+    // 设置 html 路径
+    setHtmlTemplate(htmlTemplate) {
+        assert(_.isString(htmlTemplate), "htmlTemplate 必须是一个布尔值");
+        this.config.htmlTemplate = htmlTemplate
     }
 
     // 设置入口
@@ -103,6 +112,13 @@ module.exports = class veaBuild extends event {
         assert(_.isArray(extraPostCSSPlugins), "extraPostCSSPlugins 必须是一个数组");
         this.config.extraPostCSSPlugins = extraPostCSSPlugins
     }
+
+    // 设置 extraWebpackPlugins // 扩展插件
+    setExtraWebpackPlugins(extraWebpackPlugins) {
+        assert(_.isArray(extraWebpackPlugins), "extraWebpackPlugins 必须是一个数组");
+        this.config.extraWebpackPlugins = extraWebpackPlugins
+    }
+
 
     // 设置 动态导入
     setDisableDynamicImport(disableDynamicImport) {

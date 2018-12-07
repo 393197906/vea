@@ -65,9 +65,9 @@ module.exports = function (webpackConfig, opts) {
             rule.use('css-hot-loader').loader(require.resolve('css-hot-loader'));
             // vue-style-loader
             // if (isVue) {
-            //     rule
-            //         .use('vue-style-loader')
-            //         .loader(require.resolve('vue-style-loader'))
+            rule
+                .use('vue-style-loader')
+                .loader(require.resolve('vue-style-loader'))
             // }
         } else {
             rule
