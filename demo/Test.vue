@@ -1,17 +1,18 @@
 <template>
-    <h1>test</h1>
+    <h1 class="h1">t222est4444</h1>
 </template>
 
 <script>
     export default {
         name: "Test",
         created() {
-            alert(11)
         }
 
     }
 </script>
 
 <style scoped>
-
+    .h1 {
+        background: red;
+    }
 </style>

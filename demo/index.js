@@ -3,7 +3,6 @@ import Test from "./Test"
 
 new Vue({
     created() {
-        alert(11)
     },
     components: {Test},
     template: '<Test/>'
