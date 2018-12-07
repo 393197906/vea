@@ -1,10 +1,11 @@
+const event = require("./event/event")
 const {extname} = require("path");
-
 const assert = require("assert");
 const _ = require("lodash");
 const Service = require("../service/index");
-module.exports = class veaBuild {
-    constructor() {
+module.exports = class veaBuild extends event {
+    constructor(argv) {
+        super(argv)
         this.config = {
             cwd: process.cwd(),
             entry: "",
@@ -185,12 +186,18 @@ module.exports = class veaBuild {
 
     // 开启dev
     startDev() {
-        const service = new Service(this.config);
+        const service = new Service({
+            config: this.config,
+            build: this
+        });
         service.startDev()
     }
 
     startBuild() {
-        const service = new Service(this.config);
+        const service = new Service({
+            config: this.config,
+            build: this
+        });
         service.startBuild()
     }
 

@@ -102,7 +102,6 @@ module.exports = function dev({
     });
 
     const server = new WebpackDevServer(compiler, serverConfig);
-
     ['SIGINT', 'SIGTERM'].forEach(signal => {
         process.on(signal, () => {
             server.close(() => {

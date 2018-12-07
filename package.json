@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./bin/index.js help"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,8 @@
     "autoprefixer": "^9.4.2",
     "babel-loader": "^8.0.4",
     "babel-plugin-dynamic-import-node": "^2.2.0",
+    "cfonts": "^2.3.0",
+    "chalk": "^2.4.1",
     "clipboardy": "^1.2.3",
     "copy-webpack-plugin": "^4.6.0",
     "css-hot-loader": "^1.4.2",
