@@ -4492,6 +4492,11 @@ number-is-nan@^1.0.0:
   resolved "http://registry.npm.taobao.org/number-is-nan/download/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
+number-precision@^1.2.0:
+  version "1.2.0"
+  resolved "http://registry.npm.taobao.org/number-precision/download/number-precision-1.2.0.tgz#de791d6126e10ff48fcceaeb2821c87d851df136"
+  integrity sha1-3nkdYSbhD/SPzOrrKCHIfYUd8TY=
+
 object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
   resolved "http://registry.npm.taobao.org/object-assign/download/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"

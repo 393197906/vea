@@ -44,6 +44,7 @@
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "^0.4.5",
     "mustache": "^3.0.1",
+    "number-precision": "^1.2.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "react-dev-utils": "^6.1.1",
