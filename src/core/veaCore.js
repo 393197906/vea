@@ -7,12 +7,12 @@ module.exports = class veaCore {
     }
 
     // 设置入口文件 头部
-    setEntryExportsHeader(exportsHeader) {
-        this.lib.entry.exportsHeader = exportsHeader
+    setMainExports(exports) {
+        this.lib.main.exports = exports
     }
 
     render() {
-        this.lib.renderEntry()
+        this.lib.renderMain()
     }
 
 

@@ -18,6 +18,14 @@ module.exports = ({build, core, deploy}) => {
     ]);
 
     core.registerCommend("dev", {}, (argv) => {
+        // 设置入口文件
+        core.setMainExports(`
+        import Vue from "vue"
+import Vuex from "vuex"
+import VueRouter from "vue-router"
+export {Vue,VueRouter,Vuex}
+        `);
+        core.render();
         build.startDev()
     });
     core.registerCommend("build", {}, (argv) => {

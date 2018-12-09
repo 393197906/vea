@@ -203,6 +203,7 @@ module.exports = class veaBuild extends event {
 
     // 开启dev
     startDev() {
+        // return
         const service = new Service({
             config: this.config,
             build: this
