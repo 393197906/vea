@@ -1,9 +1,21 @@
-const _ = require("lodash")
 const assert = require("assert")
+const lib = require("../lib/index")
+const _ = require("lodash")
 module.exports = class veaCore {
-    // constructor(Core) {
-    //     this.Core = Core
-    // }
+    constructor() {
+        this.lib = new lib()
+    }
+
+    // 设置入口文件 头部
+    setEntryExportsHeader(exportsHeader) {
+        this.lib.entry.exportsHeader = exportsHeader
+    }
+
+    render() {
+        this.lib.renderEntry()
+    }
+
+
     //
     // // 注册命令
     // registerCommend(name, opts, fn) {

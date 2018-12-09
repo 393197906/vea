@@ -1,4 +1,4 @@
-import Vue from "vue"
+import {Vue} from "../main.js"
 import Test from "./Test"
 
 new Vue({
@@ -6,4 +6,4 @@ new Vue({
     },
     components: {Test},
     template: '<Test/>'
-}).$mount('#app')
+}).$mount('#app');

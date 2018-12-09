@@ -2,13 +2,14 @@ const event = require("./event/event")
 const {extname} = require("path");
 const assert = require("assert");
 const _ = require("lodash");
-const Service = require("../service/index");
+const Service = require("../service");
+
 module.exports = class veaBuild extends event {
     constructor(argv) {
         super(argv)
         this.config = {
             cwd: process.cwd(),
-            entry: "",
+            entry: undefined,
             outputPath: "",
             publicPath: "",
             copyPath: "", // copy 目录
@@ -210,6 +211,7 @@ module.exports = class veaBuild extends event {
     }
 
     startBuild() {
+        // return
         const service = new Service({
             config: this.config,
             build: this

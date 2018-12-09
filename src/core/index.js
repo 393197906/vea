@@ -23,6 +23,12 @@ module.exports = class {
                         }
                         return this[name]
                     }
+                    return target[name]
+                    // core
+                    if (['setEntryExportsHeader', "render"].includes(name)) {
+                        return target[name].bind(target)
+                    }
+
                 },
                 set: null
             })
