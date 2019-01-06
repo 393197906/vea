@@ -7,16 +7,28 @@ const _ = require("lodash");
 
 module.exports = class {
     constructor() {
-        this.plugins = {}
-        this.commonds = {}
+        this.plugins = {};// 插件
+        this.commonds = {};// 命令
+        this.config = {};// 配置
         this.vea = {
-            build: new veaBuild(),
+            build: new Proxy(new veaBuild(), {
+                get: (target, name) => {
+                    // set调度
+                    const isSet = name.startsWith("set")
+                    if (isSet) {
+                        return veaBuild.generateSetMethod.call(target, name)
+                    }
+                    return target[name]
+                },
+                set: null
+            }),
             core: new Proxy(new veaCore(this), {
                 get: (target, name) => {
                     if ([
-                        "plugins",
-                        "commonds",
-                        'registerCommend'
+                        "plugins",         // 已注册插件
+                        "commonds",        // 已注册命名
+                        'registerCommend', // 注册命令
+                        "registerConfig" // 注册胚珠
                     ].includes(name)) {
                         if (typeof this[name] === "function") {
                             return this[name].bind(this)
@@ -32,7 +44,7 @@ module.exports = class {
                 },
                 set: null
             })
-        }
+        };
         // 注册插件
         this.registerPlugins()
     }
@@ -41,6 +53,11 @@ module.exports = class {
     registerPlugins() {
         pluginVue(this.vea)
         pluginHelp(this.vea)
+    }
+
+    // 注册配置
+    registerConfig() {
+
     }
 
     // 注册命令行

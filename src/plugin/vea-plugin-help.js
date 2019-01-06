@@ -1,15 +1,12 @@
 const chalk = require("chalk")
 module.exports = ({core}) => {
     core.registerCommend("help", {
-        description: "view helps",
+        description: "vea 帮助",
         usage: "vea help [name]",
         detail: `
             Examples:
-                ${chalk.gray('# generate page users')}
-                umi generate page users
-
-                ${chalk.gray('# g is the alias for generate')}
-                umi g page index
+                ${chalk.gray('# vea help build')}
+                获取buid命令的详细信息
                 `.trim()
     }, (argv) => {
         const [helpTarget] = argv
