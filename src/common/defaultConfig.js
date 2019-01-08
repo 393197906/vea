@@ -1,14 +1,14 @@
 const _ = require("lodash")
 const validateMessage = require("./validateMessage")
+const modes = ["vue","react"]
 module.exports = {
-
-    // 入口
-    entry: {
-        defaultValue: undefined,
+    mode:{
+        defaultValue: "vue",
         validate(value) {
-            return _.isString(value) || _.isPlainObject(value)
+            return _.isString(value) && modes.includes(value.trim().toLowerCase())
         },
-        message: validateMessage.stringObjectMessage
+        onlyConfig:true, // 仅配置文件
+        message:`可用的模式${modes.toString()}`
     },
     // 基础路径
     cwd: {
@@ -17,6 +17,14 @@ module.exports = {
             return _.isString(value)
         },
         message: validateMessage.stringMessge
+    },
+    // 入口
+    entry: {
+        defaultValue: undefined,
+        validate(value) {
+            return _.isString(value) || _.isPlainObject(value)
+        },
+        message: validateMessage.stringObjectMessage
     },
     // 出口
     outputPath: {
@@ -43,7 +51,7 @@ module.exports = {
         message: validateMessage.stringMessge
     },
     // 定义变量
-    define: {
+    defined: {
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)

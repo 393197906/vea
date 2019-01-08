@@ -1,15 +1,14 @@
+const _ = require("lodash");
 const veaBuild = require("./veaBuild");
 const veaCore = require("./veaCore");
 const pluginHelp = require("../plugin/vea-plugin-help")
 const pluginVue = require("../../plugin/vea-plugin-vue/index");
 const assert = require("assert");
-const _ = require("lodash");
 
 module.exports = class {
     constructor() {
         this.plugins = {};// 插件
         this.commonds = {};// 命令
-        this.config = {};// 配置
         this.vea = {
             build: new Proxy(new veaBuild(), {
                 get: (target, name) => {
@@ -28,7 +27,6 @@ module.exports = class {
                         "plugins",         // 已注册插件
                         "commonds",        // 已注册命名
                         'registerCommend', // 注册命令
-                        "registerConfig" // 注册胚珠
                     ].includes(name)) {
                         if (typeof this[name] === "function") {
                             return this[name].bind(this)
@@ -53,11 +51,6 @@ module.exports = class {
     registerPlugins() {
         pluginVue(this.vea)
         pluginHelp(this.vea)
-    }
-
-    // 注册配置
-    registerConfig() {
-
     }
 
     // 注册命令行
