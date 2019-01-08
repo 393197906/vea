@@ -61,6 +61,7 @@ module.exports = ({build, core, deploy}) => {
                 `.trim()
     }, (argv) => {
         const [target = ""] = argv
+        process.env.VEA_ENV = target // 全局变量
         build.setOutputPath(path.resolve(process.cwd(), `./dist/${target}`));
         build.startBuild()
     });

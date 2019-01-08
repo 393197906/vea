@@ -1,7 +1,16 @@
 const _ = require("lodash")
 const validateMessage = require("./validateMessage")
 const modes = ["vue","react"]
+const veaEnv = process.env.VEA_ENV
 module.exports = {
+    env:{
+        defaultValue: {},
+        validate(value) {
+            return _.isObject(value)
+        },
+        onlyConfig:true, // 仅配置文件
+        message:`必须是一个对象 且设置过VEA_ENV环境变量`
+    },
     mode:{
         defaultValue: "vue",
         validate(value) {
