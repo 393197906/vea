@@ -12,6 +12,9 @@ module.exports = class {
         this.vea = {
             build: new Proxy(new veaBuild(), {
                 get: (target, name) => {
+                    if(typeof name !=="string"){
+                        return target
+                    }
                     // set调度
                     const isSet = name.startsWith("set")
                     if (isSet) {

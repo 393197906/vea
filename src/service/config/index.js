@@ -48,7 +48,7 @@ module.exports = getBaseConfig = (opts) => {
 
     // plugins -> html
     if (existsSync(join(process.cwd(), "public/index.html")) || opts.htmlTemplate) {
-        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) : join(process.cwd(), "public/index.html")
+        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) : join(process.cwd(), "public/index.html");
         webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
             {
                 template

@@ -3,8 +3,6 @@ const chalk = require("chalk")
 module.exports = ({build, core, deploy}) => {
     build.setDisableCSSModules(true);
     build.setEntry(path.resolve(process.cwd(), "./src/index.js"));
-    // build.setEntry(path.resolve(__dirname, './entry.js'));
-    // build.setOutputPath(path.resolve(process.cwd(), "./dist"));
     build.setHash(true);
     build.setAlias({
         vue: require.resolve('vue/dist/vue.js')
@@ -62,7 +60,7 @@ module.exports = ({build, core, deploy}) => {
                 
                 `.trim()
     }, (argv) => {
-        const [target = "dev"] = argv
+        const [target = ""] = argv
         build.setOutputPath(path.resolve(process.cwd(), `./dist/${target}`));
         build.startBuild()
     });
