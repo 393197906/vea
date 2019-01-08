@@ -17,7 +17,6 @@ module.exports = ({build, core, deploy}) => {
     build.setExtraWebpackPlugins([
         [require.resolve("vue-loader/lib/plugin")],
     ]);
-
     // 注册dev命令
     core.registerCommend("dev", {
         description: "项目开发",

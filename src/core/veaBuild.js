@@ -18,21 +18,21 @@ module.exports = class veaBuild extends event {
         assert(defaultConfig[configName],`${configName} 是一个无效的配置`);
         const configObject = defaultConfig[configName];
         return  (value)=> {
-            assert(this.config.hasOwnProperty(configName),"不存在的配置");
+            assert(this._config.hasOwnProperty(configName),"不存在的配置");
             assert(configObject.validate(value),`${configName} ${configObject.message}`);
-            this.config[configName] = value
+            this._config[configName] = value
         }
     }
     constructor(argv) {
         super(argv);
         // 默认配置
-        this.defaultConfig =Object.keys(defaultConfig).reduce((container,item)=>{
+        this._defaultConfig =Object.keys(defaultConfig).reduce((container,item)=>{
             return {...container,[item]:defaultConfig[item].defaultValue}
         },{});
         // 文件配置
-        this.fileConfig = {};
+        this._fileConfig = {};
         this._registerConfig(); // 注册配置
-        this.config = Object.keys(defaultConfig).reduce((container, key) => {
+        this._config = Object.keys(defaultConfig).reduce((container, key) => {
             if(defaultConfig[key]['onlyConfig']) return container; // 如果只是针对配置文件的配置 跳过
             return {...container, [key]: defaultConfig[key]['defaultValue']}
         },{});
@@ -48,7 +48,7 @@ module.exports = class veaBuild extends event {
             assert(defaultConfig[key],`${key} 是一个无效的配置`)
             assert(defaultConfig[key].validate(fileConfig[key]),`${key} ${defaultConfig[key].message}`)
         });
-        this.fileConfig = fileConfig
+        this._fileConfig = fileConfig
     }
 
     /**
@@ -57,7 +57,7 @@ module.exports = class veaBuild extends event {
      * @private
      */
     _getComplateConfig(){
-        return Object.freeze(Object.assign({},this.defaultConfig,this.config,this.fileConfig))
+        return Object.freeze(Object.assign({},this._defaultConfig,this._config,this._fileConfig))
     }
 
     // 开启dev

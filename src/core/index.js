@@ -17,6 +17,9 @@ module.exports = class {
                     if (isSet) {
                         return veaBuild.generateSetMethod.call(target, name)
                     }
+                    if(name==="config"){
+                        return target._getComplateConfig()
+                    }
                     return target[name]
                 },
                 set: null
