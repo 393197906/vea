@@ -32,7 +32,7 @@ module.exports = getBaseConfig = (opts) => {
     webpackConfig.output
         .path(absOutputPath)
         .filename(`[name].js`)
-        .chunkFilename(`[name].async.js`)
+        .chunkFilename(`vea.[name].async.js`)
         .publicPath(opts.publicPath || undefined)
         .devtoolModuleFilenameTemplate(info => {
             return relative(opts.cwd, info.absoluteResourcePath).replace(/\\/g, '/');
@@ -55,7 +55,6 @@ module.exports = getBaseConfig = (opts) => {
             }
         ]);
     }
-
 
     webpackConfig.resolve
     // 不能设为 false，因为 tnpm 是通过 link 处理依赖，设为 false tnpm 下会有大量的冗余模块
@@ -98,7 +97,7 @@ module.exports = getBaseConfig = (opts) => {
         webpackConfig.optimization
             .splitChunks({
                 chunks: 'async',
-                name: 'vendors',
+                name: 'vea.vendors',
             })
             .runtimeChunk(false);
     }
@@ -177,8 +176,8 @@ module.exports = getBaseConfig = (opts) => {
         .test(/\.vue$/)
         .include.add(cwd)
         .end()
-        .exclude.add(/node_modules/)
-        .end()
+        // .exclude.add(/node_modules/)
+        // .end()
         .use('vue-loader')
         .loader(require.resolve('vue-loader'))
 

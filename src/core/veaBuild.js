@@ -73,8 +73,17 @@ module.exports = class veaBuild extends event {
      */
     _getComplateConfig() {
         const veaEnv = process.env.VEA_ENV
-        const envPluginConfig = this._config["env"] && this._config["env"][veaEnv]? this._config["env"][veaEnv]:{}
-        const envFileConfig = this._fileConfig["env"] && this._fileConfig["env"][veaEnv]? this._fileConfig["env"][veaEnv]:{}
+        const envPluginConfig = this._config["env"] && this._config["env"][veaEnv] ? this._config["env"][veaEnv] : {}
+        const envFileConfig = this._fileConfig["env"] && this._fileConfig["env"][veaEnv] ? this._fileConfig["env"][veaEnv] : {}
+        // 合并配置
+        const mergeConfig = Object.keys(defaultConfig).filter(item => defaultConfig[item].merge).reduce((container, item) => {
+            const c1 = this._defaultConfig[item] || {}
+            const c2 = this._config[item] || {}
+            const c3 = this._fileConfig[item] || {}
+            const c4 = envPluginConfig[item] || {}
+            const c5 = envFileConfig[item] || {}
+            return {...container, [item]: {...c1, ...c2, ...c3, ...c4, ...c5}}
+        }, {});
         return Object.freeze(
             Object.assign(
                 {},
@@ -82,7 +91,8 @@ module.exports = class veaBuild extends event {
                 this._config,
                 this._fileConfig,
                 envPluginConfig,
-                envFileConfig
+                envFileConfig,
+                mergeConfig
             )
         )
     }
@@ -99,6 +109,8 @@ module.exports = class veaBuild extends event {
 
     startBuild() {
         const config = this._getComplateConfig()
+        // console.log(config);
+        // return
         const service = new Service({
             config,
             build: this

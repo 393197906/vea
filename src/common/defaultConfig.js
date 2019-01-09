@@ -61,6 +61,7 @@ module.exports = {
     },
     // 定义变量
     defined: {
+        merge:true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -69,6 +70,7 @@ module.exports = {
     },
     // alias
     alias: {
+        merge:true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -93,6 +95,7 @@ module.exports = {
     },
     // babel 设置
     babel: {
+        merge:true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -177,6 +180,7 @@ module.exports = {
         message: validateMessage.arrayMessage
     },
     externals: {
+        merge:true,
         defaultValue: undefined,
         validate(value) {
            return  _.isPlainObject(value) || _.isString(value)

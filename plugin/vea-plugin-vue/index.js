@@ -3,6 +3,7 @@ const chalk = require("chalk")
 module.exports = ({build, core, deploy}) => {
     build.setDisableCSSModules(true);
     build.setEntry(path.resolve(process.cwd(), "./src/index.js"));
+    build.setCssPublicPath("css");
     build.setHash(true);
     build.setAlias({
         vue: require.resolve('vue/dist/vue.js')
@@ -11,11 +12,11 @@ module.exports = ({build, core, deploy}) => {
         presets: [
             [require.resolve('babel-preset-vue')]
         ],
-        // plugins:[
-        //     [
-        //         require.resolve("babel-plugin-dynamic-import-node")
-        //     ]
-        // ]
+        plugins:[
+            [
+                require.resolve("@babel/plugin-syntax-dynamic-import")
+            ]
+        ]
     });
     build.setExtraWebpackPlugins([
         [
@@ -39,7 +40,7 @@ module.exports = ({build, core, deploy}) => {
                 
                 `.trim()
     }, (argv) => {
-        // 设置入口文件
+        process.env.VEA_ENV = "dev" // 全局变量
         build.startDev()
     });
 
