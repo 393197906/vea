@@ -47,8 +47,8 @@ module.exports = getBaseConfig = (opts) => {
     }
 
     // plugins -> html
-    if (existsSync(join(process.cwd(), "public/index.html")) || opts.htmlTemplate) {
-        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) : join(process.cwd(), "public/index.html");
+    if (existsSync(join(process.cwd(), "public/index.html")) || existsSync(join(process.cwd(), "public/index.ejs"))|| opts.htmlTemplate) {
+        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) :existsSync(join(process.cwd(), "public/index.html"))? join(process.cwd(), "public/index.html"):join(process.cwd(), "public/index.ejs");
         webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
             {
                 template
@@ -106,7 +106,7 @@ module.exports = getBaseConfig = (opts) => {
     // module -> exclude
     const rule = webpackConfig.module
         .rule('exclude')
-        .test(/\.(png|jpe?g|gif|svg | woff2?|eot|ttf|otf)(\?.*)?$/)
+        .test(/\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|mp3|mp4)(\?.*)?$/)
         .exclude.add(/\.json$/)
         .add(/\.(js|jsx|ts|tsx|mjs|wasm|vue)$/)
         .add(/\.(css|less|scss|sass)$/);

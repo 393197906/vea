@@ -1,4 +1,4 @@
-import vue from "vue"
+import Vue from "vue"
 import vueRouter from "vue-router"
-import vuex from "vuex"
-export {vue,vueRouter,vuex}
+import vuex,{mapActions,mapState} from "vuex"
+export {Vue,vueRouter,vuex,mapActions,mapState}

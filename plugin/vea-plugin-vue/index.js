@@ -10,10 +10,17 @@ module.exports = ({build, core, deploy}) => {
     build.setBabel({
         presets: [
             [require.resolve('babel-preset-vue')]
-        ]
+        ],
+        // plugins:[
+        //     [
+        //         require.resolve("babel-plugin-dynamic-import-node")
+        //     ]
+        // ]
     });
     build.setExtraWebpackPlugins([
-        [require.resolve("vue-loader/lib/plugin")],
+        [
+            require.resolve("vue-loader/lib/plugin")
+        ],
     ]);
     // 注册dev命令
     core.registerCommend("dev", {
