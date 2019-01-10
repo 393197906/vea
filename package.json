@@ -1,8 +1,8 @@
 {
   "name": "vea",
-  "version": "1.0.1alpha",
+  "version": "1.0.2alpha",
   "description": "vea",
-  "main": "./src/lib/runtime/main.js",
+  "main": "./src/vea/runtime/main.js",
   "bin": {
     "vea": "./bin/index.js"
   },
