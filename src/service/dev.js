@@ -75,6 +75,7 @@ module.exports = async function dev({
     WebpackDevServer.addDevServerEntrypoints(webpackConfig, serverConfig)
     const compiler = webpack(webpackConfig);
     let isFirstCompile = true;
+    base =  webpackConfig.output.publicPath
     const urls = `${PROTOCOL}://${HOST}:${port}${base}`;
     compiler.hooks.done.tap('@vea/build dev', stats => {
         if (stats.hasErrors()) {
