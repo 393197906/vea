@@ -74,7 +74,8 @@ module.exports = function (webpackConfig, opts) {
                 .use('extract-css-loader')
                 .loader(require('mini-css-extract-plugin').loader)
                 .options({
-                    publicPath: isDev ? '/' : opts.cssPublicPath,
+                    // publicPath: isDev ? '/' : opts.cssPublicPath,
+                    publicPath: isDev ? '/' : undefined,
                 });
         }
 
