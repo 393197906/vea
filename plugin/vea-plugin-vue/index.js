@@ -1,27 +1,28 @@
-const path = require("path")
-const chalk = require("chalk")
+const path = require("path");
+const chalk = require("chalk");
 module.exports = ({build, core, deploy}) => {
-    build.setDisableCSSModules(true);
-    build.setEntry(path.resolve(process.cwd(), "./src/index.js"));
-    build.setHash(true);
-    build.setAlias({
-        vue: require.resolve('vue/dist/vue.js')
-    });
-    build.setBabel({
-        presets: [
-            [require.resolve('babel-preset-vue')]
-        ],
-        plugins: [
-            [
-                require.resolve("@babel/plugin-syntax-dynamic-import")
+    const a = build
+        .setDisableCSSModules(true)
+        .setEntry(path.resolve(process.cwd(), "./src/index.js"))
+        .setHash(true)
+        .setAlias({
+            vue: require.resolve('vue/dist/vue.js')
+        })
+        .setBabel({
+            presets: [
+                [require.resolve('babel-preset-vue')]
+            ],
+            plugins: [
+                [
+                    require.resolve("@babel/plugin-syntax-dynamic-import")
+                ]
             ]
-        ]
-    });
-    build.setExtraWebpackPlugins([
-        [
-            require.resolve("vue-loader/lib/plugin")
-        ],
-    ]);
+        })
+        .setExtraWebpackPlugins([
+            [
+                require.resolve("vue-loader/lib/plugin")
+            ],
+        ]);
     // 注册dev命令
     core.registerCommend("dev", {
         description: "项目开发",
@@ -81,13 +82,20 @@ module.exports = ({build, core, deploy}) => {
                   ${chalk.gray('# vea deploy master')}
                 部署到master环境
                 
+                  ${chalk.gray('# vea deploy [target]')}
+                部署到[target](自定义)环境
+                
                 `.trim()
     }, (argv) => {
         const [target = ""] = argv;
+        if (!target) {
+            core.run("help", ['deploy'])
+            return
+        }
         process.env.VEA_ENV = target;// 全局变量
         const {deployGitPath = ""} = build.config;
         const dirPathArray = deployGitPath.split("/")
-        const dirPath = dirPathArray[dirPathArray.length - 1].replace(".git","")
+        const dirPath = dirPathArray[dirPathArray.length - 1].replace(".git", "")
         deploy
             .setBranch(target)
             .setDistPath(path.resolve(process.cwd(), `./dist/${target}`))

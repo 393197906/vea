@@ -21,6 +21,7 @@ module.exports = class veaBuild extends event {
             assert(this._config.hasOwnProperty(configName), "不存在的配置");
             this._validateConfig(defaultConfig, {[configName]: value}, configName)
             this._config[configName] = value
+            return this
         }
     }
 

@@ -10,27 +10,29 @@ module.exports = class {
     constructor() {
         this.plugins = {};// 插件
         this.commonds = {};// 命令
+        const build = new Proxy(new veaBuild(), {
+            get: (target, name) => {
+                if(typeof name !=="string"){
+                    return target
+                }
+                // set调度
+                const isSet = name.startsWith("set")
+                if (isSet) {
+                    return veaBuild.generateSetMethod.call(build, name)
+                }
+                if(name==="config"){
+                    return target._getComplateConfig()
+                }
+                return target[name]
+            },
+            set: null
+        });
         this.vea = {
-            build: new Proxy(new veaBuild(), {
-                get: (target, name) => {
-                    if(typeof name !=="string"){
-                        return target
-                    }
-                    // set调度
-                    const isSet = name.startsWith("set")
-                    if (isSet) {
-                        return veaBuild.generateSetMethod.call(target, name)
-                    }
-                    if(name==="config"){
-                        return target._getComplateConfig()
-                    }
-                    return target[name]
-                },
-                set: null
-            }),
+            build,
             core: new Proxy(new veaCore(this), {
                 get: (target, name) => {
                     if ([
+                        "run",
                         "plugins",         // 已注册插件
                         "commonds",        // 已注册命名
                         'registerCommend', // 注册命令
@@ -59,8 +61,8 @@ module.exports = class {
 
     // 注册插件
     registerPlugins() {
-        pluginVue(this.vea)
         pluginHelp(this.vea)
+        pluginVue(this.vea)
     }
 
     // 注册命令行
