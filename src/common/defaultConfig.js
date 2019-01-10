@@ -215,4 +215,13 @@ module.exports = {
         },
         message: validateMessage.stringMessge
     },
+    // 部署git 地址
+    deployGitPath: {
+        defaultValue: "",
+        validate(value) {
+            return _.isString(value)
+        },
+        message: validateMessage.stringMessge,
+        onlyConfig:true
+    },
 };

@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const veaBuild = require("./veaBuild");
 const veaCore = require("./veaCore");
+const veaDeploy = require("./veaDeploy")
 const pluginHelp = require("../plugin/vea-plugin-help")
 const pluginVue = require("../../plugin/vea-plugin-vue/index");
 const assert = require("assert");
@@ -47,6 +48,9 @@ module.exports = class {
 
                 },
                 set: null
+            }),
+            deploy:new Proxy(new veaDeploy(),{
+                set:null
             })
         };
         // 注册插件

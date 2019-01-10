@@ -12,7 +12,7 @@ module.exports = ({build, core, deploy}) => {
         presets: [
             [require.resolve('babel-preset-vue')]
         ],
-        plugins:[
+        plugins: [
             [
                 require.resolve("@babel/plugin-syntax-dynamic-import")
             ]
@@ -65,5 +65,35 @@ module.exports = ({build, core, deploy}) => {
         process.env.VEA_ENV = target // 全局变量
         build.setOutputPath(path.resolve(process.cwd(), `./dist/${target}`));
         build.startBuild()
+    });
+
+    //  注册deploy命令
+    core.registerCommend("deploy", {
+        description: "项目部署",
+        usage: "vea deploy [target]",
+        detail: `
+            Examples:
+                ${chalk.gray('# vea deploy dev')}
+                部署到dev环境
+                
+                  ${chalk.gray('# vea deploy beta')}
+                部署到beta环境
+                
+                  ${chalk.gray('# vea deploy master')}
+                部署到master环境
+                
+                `.trim()
+    }, (argv) => {
+        const [target = ""] = argv;
+        process.env.VEA_ENV = target;// 全局变量
+        const {deployGitPath = ""} = build.config;
+        const dirPathArray = deployGitPath.split("/")
+        const dirPath = dirPathArray[dirPathArray.length - 1].replace(".git","")
+        deploy
+            .setBranch(target)
+            .setDistPath(path.resolve(process.cwd(), `./dist/${target}`))
+            .setDirPath(path.resolve(process.cwd(), `../gitDeploy/.${dirPath}AutoGit/`))
+            .setGitPath(deployGitPath)
+            .upload()
     });
 };
