@@ -4,6 +4,7 @@ const veaCore = require("./veaCore");
 const veaDeploy = require("./veaDeploy")
 const pluginHelp = require("../plugin/vea-plugin-help")
 const pluginVue = require("../../plugin/vea-plugin-vue/index");
+const pluginInit = require("../../plugin/vea-plugin-init/index");
 const assert = require("assert");
 
 module.exports = class {
@@ -62,6 +63,7 @@ module.exports = class {
     // 注册插件
     registerPlugins() {
         pluginHelp(this.vea)
+        pluginInit(this.vea)
         pluginVue(this.vea)
     }
 
