@@ -7,8 +7,8 @@
     "vea": "./bin/index.js"
   },
   "scripts": {
-    "doc:dev": "vuepress dev docs",
-    "dov:build": "vuepress build docs"
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "keywords": [],
   "author": "",
