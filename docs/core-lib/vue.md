@@ -1,23 +1,28 @@
-# filter 
-* formatDate
+---
+sidebarDepth: 5
+---
+# vue 扩展
+## filter 
+### formatDate
 > 时间戳日期格式化 
 ```javascript
 (date:number | string, fmt:string):string
 ```
-* formatNub
+### formatNub
 > 不四舍五入保留n位小数 
 ```javascript
 (val:number | string, len:number = 2):number
 ```
-* sublen
+
+### sublen
 > 字符串截取
 ```javascript
 (value:string, length:number = 8):string
 ```
 
-# mixin
+## mixin
 
-* page
+### page
 ```javascript
     data () {
       return {
@@ -28,9 +33,9 @@
     }
 ```
 
-# Vue | Vue.prototype
+##  Vue.prototype
 ### $_util
-* formatDate
+#### formatDate
 > 时间戳日期格式化 
 ```javascript
 formatDate (date:number | string, fmt:string):string
