@@ -1,4 +1,5 @@
 module.exports = {
+    base:"/vea/",
     title: 'vea',
     description: '前端项目所有生命周期',
     themeConfig: {
