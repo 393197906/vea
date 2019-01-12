@@ -2,6 +2,9 @@ const path = require("path");
 const chalk = require("chalk");
 module.exports = ({build, core, deploy}) => {
     build
+        .setDevServer({
+            overlay:true
+        })
         .setDisableCSSModules(true)
         .setEntry(path.resolve(process.cwd(), "./src/index.js"))
         .setHash(true)

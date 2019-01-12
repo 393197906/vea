@@ -202,6 +202,7 @@ module.exports = {
         message: validateMessage.objectMessage
     },
     devServer: {
+        merge:true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -214,6 +215,14 @@ module.exports = {
             return _.isString(value)
         },
         message: validateMessage.stringMessge
+    },
+    // eslintoption
+    eslintLoaderOptions: {
+        defaultValue: undefined,
+        validate(value) {
+            return _.isPlainObject(value)
+        },
+        message: validateMessage.objectMessage
     },
     // 部署git 地址
     deployGitPath: {

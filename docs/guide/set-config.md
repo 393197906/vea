@@ -178,6 +178,14 @@ css 需要兼容的浏览器配置
 
 `webpack` `devServer`设置
 
+### eslintLoaderOptions
+* 类型：`Object`
+* 默认值：`null`
+`eslintLoaderOptions`配置
+::: tip 解释
+不配置则不启用eslint检查，配置后开启
+:::
+
 ### htmlTemplate
 * 类型：`String`
 * 默认值：``
@@ -190,6 +198,7 @@ css 需要兼容的浏览器配置
 * 默认值：``
 
 部署`git地址`设置
+
 
 
 

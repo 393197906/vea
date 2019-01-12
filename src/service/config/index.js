@@ -121,61 +121,18 @@ module.exports = getBaseConfig = (opts) => {
 
 
     // module -> eslint
-    webpackConfig.module
-        .rule('eslint')
-        .test(/\.(js|vue)$/)
-        .enforce('pre')
-        .include.add(cwd)
-        .end()
-        .use('eslint-loader')
-        .loader(require.resolve('eslint-loader'))
-        .options({
-            eslintPath: require.resolve('eslint'),
-            formatter: require.resolve('eslint-friendly-formatter'),
-            // 配置
-            baseConfig: {
-                parserOptions: {
-                    parser: 'babel-eslint',
-                    ecmaVersion: 6,
-                    sourceType: 'module'
-                },
-                "env": {
-                    "browser": true,
-                    "node": true
-                },
-                extends: [
-                    'plugin:vue/strongly-recommended',
-                    'standard'
-                ],
-                plugins: [
-                    "vue"
-                ],
-                'overrides': [
-                    {
-                        'files': ['*.vue'],
-                        'rules': {
-                            'indent': 'off'
-                        }
-                    }
-                ],
-                rules: {
-                    'vue/html-self-closing': [0],
-                    'vue/script-indent': ['error', 2, {'baseIndent': 1}],
-                    'vue/no-parsing-error': [2, {'x-invalid-end-tag': false}],
-                    'no-undef': 0,
-                    'new-parens': 0,
-                    'no-unreachable': 0,
-                    'no-useless-return': 0,
-                    'no-unused-vars': 0,
-                    // allow paren-less arrow functions
-                    'arrow-parens': 0,
-                    // allow async-await
-                    'generator-star-spacing': 0,
-                    // allow debugger during development
-                    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
-                }
-            }
-        });
+    if(opts.eslintLoaderOptions){
+        webpackConfig.module
+            .rule('eslint')
+            .test(/\.(js|jsx|vue)$/)
+            .enforce('pre')
+            .include.add(cwd)
+            .end()
+            .use('eslint-loader')
+            .loader(require.resolve('eslint-loader'))
+            .options(opts.eslintLoaderOptions);
+    }
+
 
 
     // babel
