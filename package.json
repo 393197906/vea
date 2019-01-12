@@ -1,6 +1,6 @@
 {
   "name": "vea",
-  "version": "1.0.7alpha",
+  "version": "1.0.8alpha",
   "description": "vea",
   "main": "./src/vea/runtime/main.js",
   "bin": {
@@ -56,7 +56,7 @@
     "vue-loader": "^15.4.2",
     "vue-router": "^3.0.2",
     "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.5.17",
+    "vue-template-compiler": "^2.5.22",
     "vuex": "^3.0.1",
     "webpack": "^4.27.0",
     "webpack-chain": "^5.0.1",
