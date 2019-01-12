@@ -2,6 +2,7 @@ const fs = require("fs");
 const openBrowser = require('react-dev-utils/openBrowser');
 const webpack = require('webpack');
 const assert = require('assert');
+var portfinder = require('portfinder');
 const WebpackDevServer = require('webpack-dev-server');
 const chalk = require('chalk');
 // const clearConsole = require('./clearConsole');
@@ -15,7 +16,7 @@ const PROTOCOL = 'http';
 
 process.env.NODE_ENV = 'development';
 
-module.exports = function dev({
+module.exports = async function dev({
                                   webpackConfig = {},
                                   _beforeServerWithApp,
                                   beforeMiddlewares, // server beforeMiddlewares
@@ -31,6 +32,10 @@ module.exports = function dev({
                                   serverConfig: serverConfigFromOpts = {},
                               } = {}) {
     assert(webpackConfig, 'webpackConfig must be supplied');
+    // 获取port
+    port =await  (async ()=>{
+       return await portfinder.getPortPromise({port})
+    })();
     const serverConfig = {
         disableHostCheck: true,
         compress: true,
@@ -70,6 +75,7 @@ module.exports = function dev({
     WebpackDevServer.addDevServerEntrypoints(webpackConfig, serverConfig)
     const compiler = webpack(webpackConfig);
     let isFirstCompile = true;
+    base =  webpackConfig.output.publicPath || ""
     const urls = `${PROTOCOL}://${HOST}:${port}${base}`;
     compiler.hooks.done.tap('@vea/build dev', stats => {
         if (stats.hasErrors()) {

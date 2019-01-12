@@ -64,17 +64,18 @@ module.exports = function (webpackConfig, opts) {
         if (isDev) {
             rule.use('css-hot-loader').loader(require.resolve('css-hot-loader'));
             // vue-style-loader
-            // if (isVue) {
+            if (opts.mode.trim().toLowerCase() === "vue") {
             rule
                 .use('vue-style-loader')
                 .loader(require.resolve('vue-style-loader'))
-            // }
+            }
         } else {
             rule
                 .use('extract-css-loader')
                 .loader(require('mini-css-extract-plugin').loader)
                 .options({
-                    publicPath: isDev ? '/' : opts.cssPublicPath,
+                    // publicPath: isDev ? '/' : opts.cssPublicPath,
+                    publicPath: isDev ? '/' : undefined,
                 });
         }
 

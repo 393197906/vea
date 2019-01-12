@@ -7,12 +7,11 @@ module.exports = class {
         this.config = config // build config
         this.build = build // build api
     }
-
     // 开启dev服务
     startDev() {
         process.env.NODE_ENV = 'development'
         const webpackConfig = getWebpackConfig(this.config)
-        // console.log(webpackConfig.module.rules[4]);
+        // console.log(webpackConfig.plugins[3]);
         // return
         dev({
             webpackConfig,
@@ -37,7 +36,6 @@ module.exports = class {
     startBuild() {
         process.env.NODE_ENV = 'production';
         const webpackConfig = getWebpackConfig(this.config);
-        // console.log(webpackConfig.module.rules[0]);
         build({
             webpackConfig,
             cwd: this.config.cwd,

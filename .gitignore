@@ -3,5 +3,4 @@
 /packages/*/node_modules
 package-lock.json
 lib
-dist
 .idea/

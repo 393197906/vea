@@ -15,7 +15,7 @@ function mergeConfig(config, userConfig) {
 }
 
 module.exports = function (webpackConfig, opts) {
-    webpackConfig.mode('production').devtool(opts.devtool);
+    webpackConfig.mode('production').devtool(opts.devtool).output.pathinfo(false);
     if (opts.hash) {
         webpackConfig.output
             .filename(`[name].[chunkhash:8].js`)

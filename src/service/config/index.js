@@ -32,7 +32,7 @@ module.exports = getBaseConfig = (opts) => {
     webpackConfig.output
         .path(absOutputPath)
         .filename(`[name].js`)
-        .chunkFilename(`[name].async.js`)
+        .chunkFilename(`vea.[name].async.js`)
         .publicPath(opts.publicPath || undefined)
         .devtoolModuleFilenameTemplate(info => {
             return relative(opts.cwd, info.absoluteResourcePath).replace(/\\/g, '/');
@@ -47,15 +47,14 @@ module.exports = getBaseConfig = (opts) => {
     }
 
     // plugins -> html
-    if (existsSync(join(process.cwd(), "public/index.html")) || opts.htmlTemplate) {
-        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) : join(process.cwd(), "public/index.html")
+    if (existsSync(join(process.cwd(), "public/index.html")) || existsSync(join(process.cwd(), "public/index.ejs"))|| opts.htmlTemplate) {
+        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) :existsSync(join(process.cwd(), "public/index.html"))? join(process.cwd(), "public/index.html"):join(process.cwd(), "public/index.ejs");
         webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
             {
                 template
             }
         ]);
     }
-
 
     webpackConfig.resolve
     // 不能设为 false，因为 tnpm 是通过 link 处理依赖，设为 false tnpm 下会有大量的冗余模块
@@ -98,7 +97,7 @@ module.exports = getBaseConfig = (opts) => {
         webpackConfig.optimization
             .splitChunks({
                 chunks: 'async',
-                name: 'vendors',
+                name: 'vea.vendors',
             })
             .runtimeChunk(false);
     }
@@ -106,7 +105,7 @@ module.exports = getBaseConfig = (opts) => {
     // module -> exclude
     const rule = webpackConfig.module
         .rule('exclude')
-        .test(/\.(png|jpe?g|gif|svg | woff2?|eot|ttf|otf)(\?.*)?$/)
+        .test(/\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|mp3|mp4)(\?.*)?$/)
         .exclude.add(/\.json$/)
         .add(/\.(js|jsx|ts|tsx|mjs|wasm|vue)$/)
         .add(/\.(css|less|scss|sass)$/);
@@ -235,8 +234,8 @@ module.exports = getBaseConfig = (opts) => {
         .test(/\.vue$/)
         .include.add(cwd)
         .end()
-        .exclude.add(/node_modules/)
-        .end()
+        // .exclude.add(/node_modules/)
+        // .end()
         .use('vue-loader')
         .loader(require.resolve('vue-loader'))
 

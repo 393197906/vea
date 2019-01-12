@@ -1,22 +1,42 @@
+const _ = require("lodash");
 const veaBuild = require("./veaBuild");
 const veaCore = require("./veaCore");
-const pluginHelp = require("../plugin/vea-plugin-help")
+const veaDeploy = require("./veaDeploy");
+const pluginHelp = require("../../plugin/vea-plugin-help/index");
 const pluginVue = require("../../plugin/vea-plugin-vue/index");
+const pluginInit = require("../../plugin/vea-plugin-init/index");
 const assert = require("assert");
-const _ = require("lodash");
 
 module.exports = class {
     constructor() {
-        this.plugins = {}
-        this.commonds = {}
+        this.plugins = {};// 插件
+        this.commonds = {};// 命令
+        const build = new Proxy(new veaBuild(), {
+            get: (target, name) => {
+                if (typeof name !== "string") {
+                    return target
+                }
+                // set调度
+                const isSet = name.startsWith("set")
+                if (isSet) {
+                    return veaBuild.generateSetMethod.call(build, name)
+                }
+                if (name === "config") {
+                    return target._getComplateConfig()
+                }
+                return target[name]
+            },
+            set: null
+        });
         this.vea = {
-            build: new veaBuild(),
+            build,
             core: new Proxy(new veaCore(this), {
                 get: (target, name) => {
                     if ([
-                        "plugins",
-                        "commonds",
-                        'registerCommend'
+                        "run",
+                        "plugins",         // 已注册插件
+                        "commonds",        // 已注册命名
+                        'registerCommend', // 注册命令
                     ].includes(name)) {
                         if (typeof this[name] === "function") {
                             return this[name].bind(this)
@@ -31,16 +51,20 @@ module.exports = class {
 
                 },
                 set: null
+            }),
+            deploy: new Proxy(new veaDeploy(), {
+                set: null
             })
-        }
+        };
         // 注册插件
         this.registerPlugins()
     }
 
     // 注册插件
     registerPlugins() {
-        pluginVue(this.vea)
         pluginHelp(this.vea)
+        pluginInit(this.vea)
+        pluginVue(this.vea)
     }
 
     // 注册命令行

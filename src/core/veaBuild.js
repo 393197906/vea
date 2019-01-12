@@ -1,223 +1,121 @@
 const event = require("./event/event")
-const {extname} = require("path");
+const path = require('path')
+const fs = require("fs")
 const assert = require("assert");
 const _ = require("lodash");
 const Service = require("../service");
+const defaultConfig = require("../common/defaultConfig")
 
 module.exports = class veaBuild extends event {
-    constructor(argv) {
-        super(argv)
-        this.config = {
-            cwd: process.cwd(),
-            entry: undefined,
-            outputPath: "",
-            publicPath: "",
-            copyPath: "", // copy 目录
-            define: undefined, // define
-            alias: undefined,
-            hash: false,
-            disableDynamicImport: false, // 关闭动态引入
-            babel: undefined, // babel 配置
-            // css 相关
-            cssPublicPath: undefined, // cssPublicPath
-            browserslist: undefined, // 浏览器列表
-            disableCSSModules: false, // 关闭 css modules
-            extraPostCSSPlugins: undefined, // 扩展 postcss
-            extraWebpackPlugins: undefined, // 扩展webpack 插件
-            cssnano: undefined, // 设置cssnono
-            cssLoaderOptions: undefined, // cssLoaderOptions
-            lessLoaderOptions: undefined, //lessLoaderOptions
-            sassLoaderOptions: undefined, //sassLoaderOptions
-            cssModulesExcludes: undefined, // cssModulesExcludes
-            externals: undefined,
-            devtool: "", // devtool
-            manifest: false,
-            devServer: undefined,
-            // html
-            htmlTemplate: undefined
+    /**
+     * 生成配置方法
+     * @param name
+     * @returns {Function}
+     */
+    static generateSetMethod(name) {
+        let configName = name.substring(3);
+        configName = `${configName[0].toLowerCase()}${configName.substring(1)}`; // 转换驼峰
+        assert(defaultConfig[configName], `${configName} 是一个无效的配置`);
+        const configObject = defaultConfig[configName];
+        return (value) => {
+            assert(this._config.hasOwnProperty(configName), "不存在的配置");
+            this._validateConfig(defaultConfig, {[configName]: value}, configName)
+            this._config[configName] = value
+            return this
         }
     }
 
-    // 设置 html 路径
-    setHtmlTemplate(htmlTemplate) {
-        assert(_.isString(htmlTemplate), "htmlTemplate 必须是一个布尔值");
-        this.config.htmlTemplate = htmlTemplate
+    constructor(argv) {
+        super(argv);
+        // 默认配置
+        this._defaultConfig = Object.keys(defaultConfig).reduce((container, item) => {
+            return {...container, [item]: defaultConfig[item].defaultValue}
+        }, {});
+        // 文件配置
+        this._fileConfig = {};
+        this._registerConfig(); // 注册配置
+        this._config = Object.keys(defaultConfig).reduce((container, key) => {
+            if (defaultConfig[key]['onlyConfig']) return container; // 如果只是针对配置文件的配置 跳过
+            return {...container, [key]: defaultConfig[key]['defaultValue']}
+        }, {});
     }
 
-    // 设置入口
-    setEntry(entry) {
-        assert(_.isString(entry) || _.isPlainObject(entry), "entry 必须是一个对象或字符串");
-        this.config.entry = entry
+    // 验证配置
+    _validateConfig(defaultConfig, config, key) {
+        const veaEnv = process.env.VEA_ENV
+        assert(defaultConfig[key], `${key} 是一个无效的配置`)
+        assert(defaultConfig[key].validate(config[key]), `${key} ${defaultConfig[key].message}`)
+        // 递归验证env配置
+        if (key === "env") {
+            const envConfig = config[key]["dev"] || {};
+            Object.keys(envConfig).forEach(item => {
+                this._validateConfig(defaultConfig, envConfig, item)
+            });
+        }
     }
 
-    // 设置出口
-    setOutputPath(outputPath) {
-        assert(_.isString(outputPath), "entry 必须是一个字符串");
-        this.config.outputPath = outputPath
-    }
-
-    // 设置基础路径
-    setCwd(cwd) {
-        assert(_.isString(cwd), "cwd 必须是一个字符串");
-        this.config.cwd = cwd
-    }
-
-    // 设置基础build路径
-    setPublicPath(publicPath) {
-        assert(_.isString(publicPath), "PublicPath 必须是一个字符串");
-        this.config.publicPath = publicPath
-    }
-
-    //设置 copyPath
-    setCopyPath(copyPath) {
-        assert(_.isString(copyPath), "copyPath 必须是一个字符串");
-        this.config.copyPath = copyPath
-    }
-
-    // 设置 define
-    setDefine(define) {
-        assert(_.isPlainObject(define), "define 必须是一个对象");
-        this.config.define = define
-    }
-
-    // 设置 hash
-    setHash(hash) {
-        assert(_.isBoolean(hash), "hash 必须是一个布尔值");
-        this.config.hash = hash
-    }
-
-    // 设置 alias
-    setAlias(alias) {
-        assert(_.isPlainObject(alias), "alias 必须是一个对象");
-        this.config.alias = alias
-    }
-
-
-    // 设置 babel
-    setBabel(babel) {
-        assert(_.isPlainObject(babel), "babel 必须是一个对象");
-        this.config.babel = babel
-    }
-
-    //disableDynamicImport
-
-
-    // 设置 browserslist
-    setBrowserslist(browserslist) {
-        assert(_.isArray(browserslist), "browserslist 必须是一个数组");
-        this.config.browserslist = browserslist
-    }
-
-    // 设置 ExtraPostCSSPlugins
-    setExtraPostCSSPlugins(extraPostCSSPlugins) {
-        assert(_.isArray(extraPostCSSPlugins), "extraPostCSSPlugins 必须是一个数组");
-        this.config.extraPostCSSPlugins = extraPostCSSPlugins
-    }
-
-    // 设置 extraWebpackPlugins // 扩展插件
-    setExtraWebpackPlugins(extraWebpackPlugins) {
-        assert(_.isArray(extraWebpackPlugins), "extraWebpackPlugins 必须是一个数组");
-        this.config.extraWebpackPlugins = extraWebpackPlugins
-    }
-
-
-    // 设置 动态导入
-    setDisableDynamicImport(disableDynamicImport) {
-        assert(_.isBoolean(disableDynamicImport), "disableDynamicImport 必须是一个布尔值");
-        this.config.disableDynamicImport = disableDynamicImport
-    }
-
-    //设置 cssPublicPath
-    setCssPublicPath(cssPublicPath) {
-        assert(_.isString(cssPublicPath), "cssPublicPath 必须是一个对象");
-        this.config.cssPublicPath = cssPublicPath
-    }
-
-    // 设置 cssnano
-    setCssnano(cssnano) {
-        assert(_.isPlainObject(cssnano), "cssnano 必须是一个对象");
-        this.config.cssnano = cssnano
-    }
-
-    // 设置 lessLoaderOptions
-    setLessLoaderOptions(lessLoaderOptions) {
-        assert(_.isPlainObject(lessLoaderOptions), "lessLoaderOptions 必须是一个对象");
-        this.config.lessLoaderOptions = lessLoaderOptions
-    }
-
-    // 设置 cssLoaderOptions
-    setCssLoaderOptions(cssLoaderOptions) {
-        assert(_.isPlainObject(cssLoaderOptions), "cssLoaderOptions 必须是一个对象");
-        this.config.cssLoaderOptions = cssLoaderOptions
-    }
-
-    // 设置 sassLoaderOptions
-    setSassLoaderOptions(sassLoaderOptions) {
-        assert(_.isPlainObject(sassLoaderOptions), "sassLoaderOptions 必须是一个对象");
-        this.config.sassLoaderOptions = sassLoaderOptions
-    }
-
-    // cssModulesExcludes
-    setCssModulesExcludes(cssModulesExcludes) {
-        assert(_.isArray(cssModulesExcludes), "cssModulesExcludes 必须是一个对象");
-        cssModulesExcludes.forEach(file => {
-            const ext = extname(file).toLowerCase();
-            assert(
-                ext === '.css' || ext === '.less',
-                `Items in the cssModulesExcludes config must end with .css or .less, but got ${file}`,
-            );
+    // 注册配置
+    _registerConfig() {
+        const configPath = path.join(process.cwd(), "vea.config.js")
+        if (!fs.existsSync(configPath)) return
+        const fileConfig = require(configPath)
+        assert(_.isPlainObject(fileConfig), "配置必须是一个对象")
+        // 验证
+        Object.keys(fileConfig).forEach(key => {
+            this._validateConfig(defaultConfig, fileConfig, key)
         });
-        this.config.cssModulesExcludes = cssModulesExcludes
+        this._fileConfig = fileConfig
     }
 
-    // 设置 disableCSSModules
-    setDisableCSSModules(disableCSSModules) {
-        assert(_.isBoolean(disableCSSModules), "disableCSSModules 必须是一个布尔值");
-        this.config.disableCSSModules = disableCSSModules
-    }
-
-    //设置 externals
-    setExternals(externals) {
-        assert(_.isPlainObject(externals) || _.isString(externals), "externals 必须是一个对象 或 字符串");
-        this.config.externals = externals
-    }
-
-
-    // set devtool
-    setDevtool(devtool) {
-        assert(_.isString(devtool), "devtool 必须是一个字符串");
-        this.config.devtool = devtool
-    }
-
-    // set devtool
-    setManifest(manifest) {
-        assert(_.isPlainObject(manifest), "manifest 必须是一个对象");
-        this.config.manifest = manifest
-    }
-
-    // set devServer
-    setDevServer(devServer) {
-        assert(_.isPlainObject(devServer), "devServer 必须是一个对象");
-        this.config.devServer = devServer
+    /**
+     * 获取完整配置
+     * @returns {ReadonlyArray<any>}
+     * @private
+     */
+    _getComplateConfig() {
+        const veaEnv = process.env.VEA_ENV
+        const envPluginConfig = this._config["env"] && this._config["env"][veaEnv] ? this._config["env"][veaEnv] : {}
+        const envFileConfig = this._fileConfig["env"] && this._fileConfig["env"][veaEnv] ? this._fileConfig["env"][veaEnv] : {}
+        // 合并配置
+        const mergeConfig = Object.keys(defaultConfig).filter(item => defaultConfig[item].merge).reduce((container, item) => {
+            const c1 = this._defaultConfig[item] || {}
+            const c2 = this._config[item] || {}
+            const c3 = this._fileConfig[item] || {}
+            const c4 = envPluginConfig[item] || {}
+            const c5 = envFileConfig[item] || {}
+            return {...container, [item]: {...c1, ...c2, ...c3, ...c4, ...c5}}
+        }, {});
+        return Object.freeze(
+            Object.assign(
+                {},
+                this._defaultConfig,
+                this._config,
+                this._fileConfig,
+                envPluginConfig,
+                envFileConfig,
+                mergeConfig
+            )
+        )
     }
 
     // 开启dev
     startDev() {
-        // return
+        const config = this._getComplateConfig()
         const service = new Service({
-            config: this.config,
+            config,
             build: this
         });
         service.startDev()
     }
 
     startBuild() {
+        const config = this._getComplateConfig()
+        // console.log(config);
         // return
         const service = new Service({
-            config: this.config,
+            config,
             build: this
         });
         service.startBuild()
     }
-
 };

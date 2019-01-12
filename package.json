@@ -1,27 +1,21 @@
 {
   "name": "vea",
-  "version": "1.0.1",
+  "version": "1.0.6alpha",
   "description": "vea",
-  "main": "./src/lib/runtime/main.js",
+  "main": "./src/vea/runtime/main.js",
   "bin": {
     "vea": "./bin/index.js"
   },
   "scripts": {
-    "dev": "node ./bin/index.js dev",
-    "build": "node ./bin/index.js build"
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "webpack": "^4.27.0",
-    "webpack-chain": "^5.0.1",
-    "webpack-dev-server": "^3.1.10",
-    "webpack-merge": "^4.1.4",
-    "webpackbar": "^3.1.3"
-  },
   "dependencies": {
     "@babel/core": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
     "@babel/runtime": "^7.2.0",
     "autoprefixer": "^9.4.2",
@@ -38,6 +32,7 @@
     "css-loader": "^1.0.1",
     "cssnano": "^4.1.7",
     "debug": "^4.1.0",
+    "download-git-repo": "^1.1.0",
     "eslint": "^5.10.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-friendly-formatter": "^4.0.1",
@@ -50,11 +45,14 @@
     "friendly-errors-webpack-plugin": "^1.7.0",
     "hard-source-webpack-plugin": "^0.12.0",
     "html-webpack-plugin": "^3.2.0",
+    "inquirer": "^6.2.1",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "^0.4.5",
     "mustache": "^3.0.1",
     "number-precision": "^1.2.0",
+    "ora": "^3.0.0",
+    "portfinder": "^1.0.20",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "react-dev-utils": "^6.1.1",
@@ -68,6 +66,12 @@
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.5.17",
     "vuex": "^3.0.1",
-    "webpack-manifest-plugin": "^2.0.4"
+    "webpack": "^4.27.0",
+    "webpack-chain": "^5.0.1",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-manifest-plugin": "^2.0.4",
+    "webpack-merge": "^4.1.4",
+    "webpackbar": "^3.1.3",
+    "yt-auto-git": "^1.1.0"
   }
 }
