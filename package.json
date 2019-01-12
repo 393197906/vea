@@ -1,6 +1,6 @@
 {
   "name": "vea",
-  "version": "1.0.8alpha",
+  "version": "1.0.9alpha",
   "description": "vea",
   "main": "./src/vea/runtime/main.js",
   "bin": {
@@ -52,7 +52,7 @@
     "sass-loader": "^7.1.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "umi-url-pnp-loader": "^1.1.2",
-    "vue": "2.5.21",
+    "vue": "^2.5.22",
     "vue-loader": "^15.4.2",
     "vue-router": "^3.0.2",
     "vue-style-loader": "^4.1.2",
