@@ -1,7 +1,7 @@
 const path = require("path");
 const chalk = require("chalk");
 module.exports = ({build, core, deploy}) => {
-    const a = build
+    build
         .setDisableCSSModules(true)
         .setEntry(path.resolve(process.cwd(), "./src/index.js"))
         .setHash(true)
