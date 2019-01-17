@@ -204,8 +204,8 @@ module.exports = function (webpackConfig, opts) {
 
     webpackConfig.plugin('extract-css').use(require('mini-css-extract-plugin'), [
         {
-            filename: `[name]${hash}.css`,
-            chunkFilename: `[name]${hash}.chunk.css`,
+            filename: `css/[name]${hash}.css`,
+            chunkFilename: `css/js/[name]${hash}.chunk.css`,
         },
     ]);
 

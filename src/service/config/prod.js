@@ -18,8 +18,8 @@ module.exports = function (webpackConfig, opts) {
     webpackConfig.mode('production').devtool(opts.devtool).output.pathinfo(false);
     if (opts.hash) {
         webpackConfig.output
-            .filename(`[name].[chunkhash:8].js`)
-            .chunkFilename(`[name].[chunkhash:8].async.js`);
+            .filename(`js/[name].[chunkhash:8].js`)
+            .chunkFilename(`js/[name].[chunkhash:8].async.js`);
     }
 
     webpackConfig.performance.hints(false);
