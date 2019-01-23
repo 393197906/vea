@@ -85,7 +85,7 @@ module.exports = class veaBuild extends event {
             const c5 = envFileConfig[item] || {}
             return {...container, [item]: {...c1, ...c2, ...c3, ...c4, ...c5}}
         }, {});
-        return Object.freeze(
+        return this._transformPath(
             Object.assign(
                 {},
                 this._defaultConfig,
@@ -96,6 +96,23 @@ module.exports = class veaBuild extends event {
                 mergeConfig
             )
         )
+    }
+
+    // 转换路径
+    _transformPath(options) {
+        const wPaths = ["entry", "outputPath", "copyPath", 'htmlTemplate', 'cssPublicPath'];
+        return Object.freeze(Object.keys(options).reduce((container, item) => {
+            return {
+                ...container, [item]: (target => {
+                    if (
+                        !wPaths.includes(item) ||
+                        typeof target !== "string" ||
+                        !target.trim() ||
+                        path.isAbsolute(target)) return target
+                    return path.resolve(process.cwd(), target)
+                })(options[item])
+            }
+        }, {}))
     }
 
     // 开启dev
@@ -110,8 +127,6 @@ module.exports = class veaBuild extends event {
 
     startBuild() {
         const config = this._getComplateConfig()
-        // console.log(config);
-        // return
         const service = new Service({
             config,
             build: this
