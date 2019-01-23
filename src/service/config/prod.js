@@ -21,21 +21,16 @@ module.exports = function (webpackConfig, opts) {
         .plugin('hash-module-ids')
         .use(require('webpack/lib/HashedModuleIdsPlugin'));
     // 压缩
-    webpackConfig.optimization.minimizer("js").use(require.resolve("uglifyjs-webpack-plugin"), [
+    webpackConfig.optimization.minimizer("js").use(require.resolve("terser-webpack-plugin"), [
         {
             exclude: /\.min\.js$/,
             sourceMap: !!opts.devtool,
             cache: true,
             parallel: true, //多进程
             extractComments: false, // 移除注释
-            uglifyOptions: {
-                compress: {
-                    unused: true,
-                    warnings: false,
-                    drop_debugger: true
-                },
+            terserOptions: {
                 output: {
-                    comments: false
+                    comments: false,
                 }
             }
         }

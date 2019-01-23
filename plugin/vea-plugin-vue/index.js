@@ -13,8 +13,8 @@ module.exports = ({build, core, deploy}) => {
         })
         .setBabel({
             presets: [
-                [require.resolve('@babel/preset-env'),{
-                    // "modules": false,
+                [require.resolve('@babel/preset-env'), {
+                    "modules": false,
                     "targets": {
                         "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
                     },
@@ -22,10 +22,13 @@ module.exports = ({build, core, deploy}) => {
                 }]
             ],
             plugins: [
-                [require.resolve("@babel/plugin-transform-runtime")],
                 [require.resolve("@babel/plugin-syntax-dynamic-import")],
                 [require.resolve("@babel/plugin-proposal-class-properties")],
                 [require.resolve("babel-plugin-transform-vue-jsx")],
+                [require.resolve("@babel/plugin-transform-runtime"), {
+                    "regenerator": false,
+                    "useESModules": true,
+                }],
             ]
         })
         .setExtraWebpackPlugins([
