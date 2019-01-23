@@ -75,7 +75,7 @@ module.exports = function (webpackConfig, opts) {
                 .loader(require('mini-css-extract-plugin').loader)
                 .options({
                     // publicPath: isDev ? '/' : opts.cssPublicPath,
-                    publicPath: isDev ? '/' : undefined,
+                    publicPath: isDev ? '/' : "../",
                 });
         }
 
@@ -205,8 +205,7 @@ module.exports = function (webpackConfig, opts) {
     webpackConfig.plugin('extract-css').use(require('mini-css-extract-plugin'), [
         {
             filename: `css/[name]${hash}.css`,
-            chunkFilename: `css/js/[name]${hash}.chunk.css`,
+            chunkFilename: `css/[name]${hash}.chunk.css`,
         },
     ]);
-
-}
+};

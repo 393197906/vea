@@ -233,6 +233,7 @@ module.exports = getBaseConfig = (opts) => {
                     from: join(opts.cwd, 'public'),
                     to: absOutputPath,
                     toType: 'dir',
+                    ignore: [ 'index.html',"index.ejs" ]
                 },
             ],
         ]);
