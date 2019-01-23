@@ -4,7 +4,7 @@ const {join} = require('path')
 module.exports = function (webpackConfig, opts) {
     webpackConfig
         .mode('development')
-        .devtool(opts.devtool || 'cheap-module-source-map')
+        .devtool(opts.devtool || 'cheap-module-eval-source-map')
         .output.pathinfo(true);
 
     webpackConfig
