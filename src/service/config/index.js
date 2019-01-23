@@ -1,5 +1,5 @@
 const Config = require("webpack-chain");
-const {join, resolve, relative} = require('path');
+const {join, resolve, relative,isAbsolute} = require('path');
 const resolveDefine = require("./resolveDefine")
 const {existsSync} = require('fs');
 const {EOL} = require('os');
@@ -48,7 +48,7 @@ module.exports = getBaseConfig = (opts) => {
 
     // plugins -> html
     if (existsSync(join(process.cwd(), "public/index.html")) || existsSync(join(process.cwd(), "public/index.ejs"))|| opts.htmlTemplate) {
-        const template = opts.htmlTemplate ? join(cwd, opts.htmlTemplate) :existsSync(join(process.cwd(), "public/index.html"))? join(process.cwd(), "public/index.html"):join(process.cwd(), "public/index.ejs");
+        const template = opts.htmlTemplate ? isAbsolute(opts.htmlTemplate)?opts.htmlTemplate:join(cwd, opts.htmlTemplate) :existsSync(join(process.cwd(), "public/index.html"))? join(process.cwd(), "public/index.html"):join(process.cwd(), "public/index.ejs");
         webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
             {
                 template

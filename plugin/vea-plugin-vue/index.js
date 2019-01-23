@@ -3,7 +3,7 @@ const chalk = require("chalk");
 module.exports = ({build, core, deploy}) => {
     build
         .setDevServer({
-            overlay:true
+            overlay: true
         })
         .setDisableCSSModules(true)
         .setEntry(path.resolve(process.cwd(), "./src/index.js"))
@@ -13,12 +13,19 @@ module.exports = ({build, core, deploy}) => {
         })
         .setBabel({
             presets: [
-                [require.resolve('babel-preset-vue')]
+                [require.resolve('@babel/preset-env'),{
+                    // "modules": false,
+                    "targets": {
+                        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+                    },
+                    "useBuiltIns": "usage"
+                }]
             ],
             plugins: [
-                [
-                    require.resolve("@babel/plugin-syntax-dynamic-import")
-                ]
+                [require.resolve("@babel/plugin-transform-runtime")],
+                [require.resolve("@babel/plugin-syntax-dynamic-import")],
+                [require.resolve("@babel/plugin-proposal-class-properties")],
+                [require.resolve("babel-plugin-transform-vue-jsx")],
             ]
         })
         .setExtraWebpackPlugins([
