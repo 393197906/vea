@@ -1,19 +1,3 @@
-const UglifyPlugin = require('uglifyjs-webpack-plugin')
-const {isPlainObject} = require('lodash')
-
-function mergeConfig(config, userConfig) {
-    if (typeof userConfig === 'function') {
-        return userConfig(config);
-    } else if (isPlainObject(userConfig)) {
-        return {
-            ...config,
-            ...userConfig,
-        };
-    } else {
-        return config;
-    }
-}
-
 module.exports = function (webpackConfig, opts) {
     webpackConfig.mode('production').devtool(opts.devtool).output.pathinfo(false);
     if (opts.hash) {
@@ -36,15 +20,38 @@ module.exports = function (webpackConfig, opts) {
     webpackConfig
         .plugin('hash-module-ids')
         .use(require('webpack/lib/HashedModuleIdsPlugin'));
-    /*  webpackConfig.optimization.minimizer([
-          new UglifyPlugin(
-              // mergeConfig(
-              //     {
-              //         ...uglifyOptions,
-              //         sourceMap: !!opts.devtool,
-              //     },
-              //     opts.uglifyJSOptions,
-              // ),
-          ),
-      ]);*/
-}
+    // 压缩
+    webpackConfig.optimization.minimizer("js").use(require.resolve("uglifyjs-webpack-plugin"), [
+        {
+            exclude: /\.min\.js$/,
+            sourceMap: !!opts.devtool,
+            cache: true,
+            parallel: true, //多进程
+            extractComments: false, // 移除注释
+            uglifyOptions: {
+                compress: {
+                    unused: true,
+                    warnings: false,
+                    drop_debugger: true
+                },
+                output: {
+                    comments: false
+                }
+            }
+        }
+    ]);
+    webpackConfig.optimization.minimizer("css").use(require.resolve("optimize-css-assets-webpack-plugin"), [
+        {
+            assetNameRegExp: /\.css$/g,
+            cssProcessorOptions: {
+                safe: true,
+                autoprefixer: {disable: true},
+                mergeLonghand: false,
+                discardComments: {
+                    removeAll: true // 移除注释
+                }
+            },
+            canPrint: true
+        }
+    ])
+};
