@@ -2,7 +2,6 @@ const path = require("path");
 const chalk = require("chalk");
 module.exports = ({build, core, deploy}, options) => {
     const registerBuild = () => {
-        const {routes = []} = options
         build
             .setExtraWebpackPlugins([
                 [
@@ -14,8 +13,9 @@ module.exports = ({build, core, deploy}, options) => {
                         return [
                             require.resolve("prerender-spa-plugin"), [
                                 {
+                                    ...options,
                                     staticDir: path.resolve(process.cwd(), `./dist/${target}`),
-                                    routes
+
                                 }
                             ]
                         ]
