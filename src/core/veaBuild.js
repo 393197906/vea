@@ -42,7 +42,6 @@ module.exports = class veaBuild extends event {
 
     // 验证配置
     _validateConfig(defaultConfig, config, key) {
-        const veaEnv = process.env.VEA_ENV
         assert(defaultConfig[key], `${key} 是一个无效的配置`)
         assert(defaultConfig[key].validate(config[key]), `${key} ${defaultConfig[key].message}`)
         // 递归验证env配置
@@ -62,6 +61,7 @@ module.exports = class veaBuild extends event {
         assert(_.isPlainObject(fileConfig), "配置必须是一个对象")
         // 验证
         Object.keys(fileConfig).forEach(key => {
+            assert(defaultConfig[key]&&!defaultConfig[key].onlyPlugin,`${key} 只允许插件配置`)
             this._validateConfig(defaultConfig, fileConfig, key)
         });
         this._fileConfig = fileConfig
@@ -127,6 +127,8 @@ module.exports = class veaBuild extends event {
 
     startBuild() {
         const config = this._getComplateConfig()
+        // console.log(config);
+        // return
         const service = new Service({
             config,
             build: this
