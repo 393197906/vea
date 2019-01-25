@@ -1,5 +1,5 @@
 const Config = require("webpack-chain");
-const {join, resolve, relative,isAbsolute} = require('path');
+const {join, resolve, relative, isAbsolute} = require('path');
 const resolveDefine = require("./resolveDefine")
 const {existsSync} = require('fs');
 const {EOL} = require('os');
@@ -41,14 +41,18 @@ module.exports = getBaseConfig = (opts) => {
     // 挂载自定义插件
     if (opts.extraWebpackPlugins) {
         opts.extraWebpackPlugins.forEach((item, index) => {
+            if (typeof item === "function") {
+                item = item() || []
+            }
             const [path = "", opts = []] = item
+            if(!path) return
             webpackConfig.plugin(`extraWebpackPlugins${index}`).use(require(path), opts);
         })
     }
 
     // plugins -> html
-    if (existsSync(join(process.cwd(), "public/index.html")) || existsSync(join(process.cwd(), "public/index.ejs"))|| opts.htmlTemplate) {
-        const template = opts.htmlTemplate ? isAbsolute(opts.htmlTemplate)?opts.htmlTemplate:join(cwd, opts.htmlTemplate) :existsSync(join(process.cwd(), "public/index.html"))? join(process.cwd(), "public/index.html"):join(process.cwd(), "public/index.ejs");
+    if (existsSync(join(process.cwd(), "public/index.html")) || existsSync(join(process.cwd(), "public/index.ejs")) || opts.htmlTemplate) {
+        const template = opts.htmlTemplate ? isAbsolute(opts.htmlTemplate) ? opts.htmlTemplate : join(cwd, opts.htmlTemplate) : existsSync(join(process.cwd(), "public/index.html")) ? join(process.cwd(), "public/index.html") : join(process.cwd(), "public/index.ejs");
         webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
             {
                 template
@@ -121,7 +125,7 @@ module.exports = getBaseConfig = (opts) => {
 
 
     // module -> eslint
-    if(opts.eslintLoaderOptions){
+    if (opts.eslintLoaderOptions) {
         webpackConfig.module
             .rule('eslint')
             .test(/\.(js|jsx|vue)$/)
@@ -132,7 +136,6 @@ module.exports = getBaseConfig = (opts) => {
             .loader(require.resolve('eslint-loader'))
             .options(opts.eslintLoaderOptions);
     }
-
 
 
     // babel
@@ -233,7 +236,7 @@ module.exports = getBaseConfig = (opts) => {
                     from: join(opts.cwd, 'public'),
                     to: absOutputPath,
                     toType: 'dir',
-                    ignore: [ 'index.html',"index.ejs" ]
+                    ignore: ['index.html', "index.ejs"]
                 },
             ],
         ]);

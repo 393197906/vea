@@ -37,6 +37,7 @@ module.exports = {
     },
     // 出口
     outputPath: {
+        onlyPlugin:true, // 仅插件文件
         defaultValue: "",
         validate(value) {
             return _.isString(value)
@@ -232,5 +233,14 @@ module.exports = {
         },
         message: validateMessage.stringMessge,
         onlyConfig:true
+    },
+    // 设置插件
+    plugins: {
+        onlyConfig:true,
+        defaultValue: [],
+        validate(value) {
+            return _.isArray(value)
+        },
+        message: validateMessage.arrayMessage
     },
 };

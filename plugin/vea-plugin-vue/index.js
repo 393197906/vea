@@ -34,7 +34,7 @@ module.exports = ({build, core, deploy}) => {
         .setExtraWebpackPlugins([
             [
                 require.resolve("vue-loader/lib/plugin")
-            ],
+            ]
         ]);
     // 注册dev命令
     core.registerCommend("dev", {

@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const path = require('path')
 const veaBuild = require("./veaBuild");
 const veaCore = require("./veaCore");
 const veaDeploy = require("./veaDeploy");
@@ -59,12 +60,31 @@ module.exports = class {
         // 注册插件
         this.registerPlugins()
     }
-
+    // 注册自定义插件
+    registerCustomizePlugins(){
+        const {plugins = []} = this.vea.build.config;
+        plugins.forEach(plugin => {
+            assert(_.isArray(plugin), `$插件必须是一个数组`)
+            let [pluginPath = "", pluginOption = {}] = plugin
+            assert(_.isString(pluginPath), `${pluginPath} 必须是一个字符串`)
+            assert(_.isPlainObject(pluginOption), `${pluginOption} 必须是一个对象`)
+            pluginPath = (() => {
+                if (pluginPath.indexOf("/") < 0) {
+                    return require.resolve(path.resolve(process.cwd(), 'node_modules', pluginPath))
+                }
+                return path.isAbsolute(pluginPath) ? pluginPath : path.resolve(process.cwd(), pluginPath)
+            })();
+            const pluginInstance = require(pluginPath)
+            assert(_.isFunction(pluginInstance), "插件实体必须返回一个函数")
+            pluginInstance(this.vea,pluginOption)
+        })
+    }
     // 注册插件
     registerPlugins() {
         pluginHelp(this.vea)
         pluginInit(this.vea)
         pluginVue(this.vea)
+        this.registerCustomizePlugins()
     }
 
     // 注册命令行
