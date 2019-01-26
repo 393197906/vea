@@ -192,6 +192,23 @@ css 需要兼容的浏览器配置
 
 设置`html`摸板路径
 
+### plugins
+* 类型：`Array`
+* 默认值：``
+
+自定义插件配置
+::: tip 示例
+开启静态化
+```js
+plugins: [
+    ['vea-plugin-vue-static', {
+      routes: ['/']
+    }]
+  ]
+```
+:::
+
+
 ## 部署配置
 ### deployGitPath
 * 类型：`String`
