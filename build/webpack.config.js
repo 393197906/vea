@@ -13,7 +13,7 @@ module.exports = {
     library: 'vea',
     libraryTarget: 'commonjs2'
   },
-  externals: /^(vue|react|axios|lodash).*$/i,
+  externals: /^(vue|react|axios|lodash|number-precision).*$/i,
   resolve: {
     extensions: ['.js', '.json'],
     modules: ['node_modules']
