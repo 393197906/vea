@@ -2,3 +2,8 @@ docs/
 .idea/
 packages/
 yarn.lock
+build/
+babel.config.js
+
+
+
