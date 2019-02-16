@@ -118,6 +118,8 @@ module.exports = class veaBuild extends event {
     // 开启dev
     startDev() {
         const config = this._getComplateConfig()
+        // console.log(config);
+        // return
         const service = new Service({
             config,
             build: this

@@ -61,15 +61,17 @@ module.exports = function (webpackConfig, opts) {
     }
 
     function applyCSSRules(rule, {cssModules, less, sass}) {
+        const isVue = opts.mode.trim().toLowerCase() === "vue"
         if (isDev) {
-            rule.use('css-hot-loader').loader(require.resolve('css-hot-loader'));
-            // vue-style-loader
-            if (opts.mode.trim().toLowerCase() === "vue") {
-            rule
-                .use('vue-style-loader')
-                .loader(require.resolve('vue-style-loader'))
+            if (isVue) {
+                rule
+                    .use('vue-style-loader')
+                    .loader(require.resolve('vue-style-loader'))
+            } else {
+                rule.use('css-hot-loader').loader(require.resolve('css-hot-loader'));
             }
-        } else {
+        }
+        if (!isDev || (isDev && !isVue)) {
             rule
                 .use('extract-css-loader')
                 .loader(require('mini-css-extract-plugin').loader)
@@ -78,6 +80,7 @@ module.exports = function (webpackConfig, opts) {
                     publicPath: isDev ? '/' : "../",
                 });
         }
+
 
         rule
             .use('css-loader')

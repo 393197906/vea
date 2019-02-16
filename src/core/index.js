@@ -5,6 +5,7 @@ const veaCore = require("./veaCore");
 const veaDeploy = require("./veaDeploy");
 const pluginHelp = require("../../plugin/vea-plugin-help/index");
 const pluginVue = require("../../plugin/vea-plugin-vue/index");
+const pluginReact = require("../../plugin/vea-plugin-react/index");
 const pluginInit = require("../../plugin/vea-plugin-init/index");
 const assert = require("assert");
 
@@ -58,10 +59,11 @@ module.exports = class {
             })
         };
         // 注册插件
-        this.registerPlugins()
+        this.registerPlugins(build.config)
     }
+
     // 注册自定义插件
-    registerCustomizePlugins(){
+    registerCustomizePlugins() {
         const {plugins = []} = this.vea.build.config;
         plugins.forEach(plugin => {
             assert(_.isArray(plugin), `$插件必须是一个数组`)
@@ -76,14 +78,19 @@ module.exports = class {
             })();
             const pluginInstance = require(pluginPath)
             assert(_.isFunction(pluginInstance), "插件实体必须返回一个函数")
-            pluginInstance(this.vea,pluginOption)
+            pluginInstance(this.vea, pluginOption)
         })
     }
+
     // 注册插件
-    registerPlugins() {
+    registerPlugins({mode}) {
         pluginHelp(this.vea)
         pluginInit(this.vea)
-        pluginVue(this.vea)
+        mode === 'vue' ?
+            pluginVue(this.vea)
+            : mode === 'react' ?
+            pluginReact(this.vea)
+            : ""
         this.registerCustomizePlugins()
     }
 

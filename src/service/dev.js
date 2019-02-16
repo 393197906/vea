@@ -32,6 +32,8 @@ module.exports = async function dev({
                                   serverConfig: serverConfigFromOpts = {},
                               } = {}) {
     assert(webpackConfig, 'webpackConfig must be supplied');
+    // console.log(webpackConfig.module.rules[7].use);
+    // return
     // 获取port
     port =await  (async ()=>{
        return await portfinder.getPortPromise({port})
