@@ -1,6 +1,8 @@
 const path = require("path");
 const chalk = require("chalk");
+const generate = require("./src/generate")
 module.exports = ({build, core, deploy}) => {
+    generate(core)
     build
         .setDevServer({
             overlay: true
