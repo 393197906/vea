@@ -15,11 +15,15 @@ module.exports = ({build, core, deploy}) => {
             Examples:
                 ${chalk.gray('# vea init vue')}
                 初始化vue项目
+                ${chalk.gray('# vea init vue-static')}
+                初始化可静态化的vue项目
+                 ${chalk.gray('# vea init react')}
+                 初始化react项目
                 `.trim()
     }, (argv) => {
         const [template, rawName] = argv;
-        if(!template){
-            core.run("help",['init'])
+        if (!template) {
+            core.run("help", ['init'])
             return
         }
         const hasSlash = template.indexOf('/') > -1;
