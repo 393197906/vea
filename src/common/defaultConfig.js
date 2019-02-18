@@ -1,23 +1,23 @@
 const _ = require("lodash")
 const validateMessage = require("./validateMessage")
-const modes = ["vue","react"]
+const modes = ["vue", "react"]
 const veaEnv = process.env.VEA_ENV
 module.exports = {
-    env:{
+    env: {
         defaultValue: {},
         validate(value) {
             return _.isObject(value)
         },
-        onlyConfig:true, // 仅配置文件
-        message:`必须是一个对象 且设置过VEA_ENV环境变量`
+        onlyConfig: true, // 仅配置文件
+        message: `必须是一个对象 且设置过VEA_ENV环境变量`
     },
-    mode:{
+    mode: {
         defaultValue: "vue",
         validate(value) {
             return _.isString(value) && modes.includes(value.trim().toLowerCase())
         },
-        onlyConfig:true, // 仅配置文件
-        message:`可用的模式${modes.toString()}`
+        onlyConfig: true, // 仅配置文件
+        message: `可用的模式${modes.toString()}`
     },
     // 基础路径
     cwd: {
@@ -37,7 +37,7 @@ module.exports = {
     },
     // 出口
     outputPath: {
-        onlyPlugin:true, // 仅插件文件
+        onlyPlugin: true, // 仅插件文件
         defaultValue: "",
         validate(value) {
             return _.isString(value)
@@ -62,7 +62,7 @@ module.exports = {
     },
     // 定义变量
     defined: {
-        merge:true,
+        merge: true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -71,7 +71,7 @@ module.exports = {
     },
     // alias
     alias: {
-        merge:true,
+        merge: true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -96,7 +96,7 @@ module.exports = {
     },
     // babel 设置
     babel: {
-        merge:true,
+        merge: true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -181,17 +181,17 @@ module.exports = {
         message: validateMessage.arrayMessage
     },
     externals: {
-        merge:true,
+        merge: true,
         defaultValue: undefined,
         validate(value) {
-           return  _.isPlainObject(value) || _.isString(value)
+            return _.isPlainObject(value) || _.isString(value)
         },
         message: validateMessage.stringObjectMessage
     },
     devtool: {
         defaultValue: "",
         validate(value) {
-            return  _.isString(value)
+            return _.isString(value)
         },
         message: validateMessage.stringMessge
     },
@@ -203,7 +203,7 @@ module.exports = {
         message: validateMessage.objectMessage
     },
     devServer: {
-        merge:true,
+        merge: true,
         defaultValue: undefined,
         validate(value) {
             return _.isPlainObject(value)
@@ -232,15 +232,24 @@ module.exports = {
             return _.isString(value)
         },
         message: validateMessage.stringMessge,
-        onlyConfig:true
+        onlyConfig: true
     },
     // 设置插件
     plugins: {
-        onlyConfig:true,
+        onlyConfig: true,
         defaultValue: [],
         validate(value) {
             return _.isArray(value)
         },
         message: validateMessage.arrayMessage
+    },
+    // 是否清除目录
+    clear: {
+        onlyPlugin: true,
+        defaultValue: true,
+        validate(value) {
+            return _.isBoolean(value)
+        },
+        message: validateMessage.booleanMessage
     },
 };

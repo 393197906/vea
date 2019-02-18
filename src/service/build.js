@@ -10,7 +10,7 @@ const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 module.exports = function build(opts = {}) {
-    const {webpackConfig, cwd = process.cwd(), onSuccess, onFail} = opts;
+    const {webpackConfig, cwd = process.cwd(), onSuccess, onFail, config: {clear}} = opts;
     // console.log(webpackConfig.module.rules);
     // return
     assert(webpackConfig, 'webpackConfig should be supplied.');
@@ -18,7 +18,9 @@ module.exports = function build(opts = {}) {
     debug(
         `Clean output path ${webpackConfig.output.path.replace(`${cwd}/`, '')}`,
     );
-    rimraf.sync(webpackConfig.output.path);
+    if (clear) {
+        rimraf.sync(webpackConfig.output.path);
+    }
 
     debug('build start');
     webpack(webpackConfig, (err, stats) => {

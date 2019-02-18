@@ -73,11 +73,12 @@ module.exports = ({build, core, deploy}) => {
                 打包到master环境
                 
                 `.trim()
-    }, (argv) => {
+    }, (argv, cb) => {
         const [target = ""] = argv
         process.env.VEA_ENV = target // 全局变量
         build.setOutputPath(path.resolve(process.cwd(), `./dist/${target}`));
         build.startBuild()
+        build.once("onBuildSuccess", cb)
     });
 
     //  注册deploy命令

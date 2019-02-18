@@ -45,19 +45,22 @@ module.exports = getBaseConfig = (opts) => {
                 item = item() || []
             }
             const [path = "", opts = []] = item
-            if(!path) return
+            if (!path) return
             webpackConfig.plugin(`extraWebpackPlugins${index}`).use(require(path), opts);
         })
     }
 
     // plugins -> html
     if (existsSync(join(process.cwd(), "public/index.html")) || existsSync(join(process.cwd(), "public/index.ejs")) || opts.htmlTemplate) {
-        const template = opts.htmlTemplate ? isAbsolute(opts.htmlTemplate) ? opts.htmlTemplate : join(cwd, opts.htmlTemplate) : existsSync(join(process.cwd(), "public/index.html")) ? join(process.cwd(), "public/index.html") : join(process.cwd(), "public/index.ejs");
-        webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
-            {
-                template
-            }
-        ]);
+        // 如果为‘no-template’ 则不启用html插件
+        if (opts.htmlTemplate === undefined || opts.htmlTemplate.indexOf('@vea-no-template') <= -1) {
+            const template = opts.htmlTemplate ? isAbsolute(opts.htmlTemplate) ? opts.htmlTemplate : join(cwd, opts.htmlTemplate) : existsSync(join(process.cwd(), "public/index.html")) ? join(process.cwd(), "public/index.html") : join(process.cwd(), "public/index.ejs");
+            webpackConfig.plugin('index.html').use(require('html-webpack-plugin'), [
+                {
+                    template
+                }
+            ]);
+        }
     }
 
     webpackConfig.resolve
