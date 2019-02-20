@@ -9,7 +9,7 @@ module.exports = ({build, core, deploy}) => {
         .setEntry(path.resolve(process.cwd(), "./src/index.js"))
         .setHash(true)
         .setAlias({
-            vue: require.resolve('vue/dist/vue.js')
+            'vue$': require.resolve('vue/dist/vue.esm.js')
         })
         .setBabel({
             presets: [
@@ -73,12 +73,16 @@ module.exports = ({build, core, deploy}) => {
                 打包到master环境
                 
                 `.trim()
-    }, (argv, cb) => {
+    }, (argv, cbObject = {}) => {
         const [target = ""] = argv
         process.env.VEA_ENV = target // 全局变量
         build.setOutputPath(path.resolve(process.cwd(), `./dist/${target}`));
+        // 执行before钩子
+        if (cbObject.before && typeof cbObject.before === "function") {
+            cbObject.before(build)
+        }
         build.startBuild()
-        build.once("onBuildSuccess", cb)
+        build.once("onBuildSuccess", cbObject.after)
     });
 
     //  注册deploy命令

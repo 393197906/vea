@@ -14,6 +14,11 @@ module.exports = getBaseConfig = (opts) => {
     const {cwd} = opts
     const isDev = process.env.NODE_ENV === 'development';
     const webpackConfig = new Config();
+    // target
+    if (opts.target) {
+        webpackConfig.target(opts.target)
+    }
+
     // entry
     if (opts.entry) {
         if (typeof opts.entry === 'string') {
@@ -36,7 +41,15 @@ module.exports = getBaseConfig = (opts) => {
         .publicPath(opts.publicPath || undefined)
         .devtoolModuleFilenameTemplate(info => {
             return relative(opts.cwd, info.absoluteResourcePath).replace(/\\/g, '/');
-        });
+        })
+        .libraryTarget(opts.libraryTarget);
+
+    // node
+    if (opts.node) {
+        Object.keys(opts.node).forEach(key => {
+            webpackConfig.node.set(key, opts.node[key])
+        })
+    }
 
     // 挂载自定义插件
     if (opts.extraWebpackPlugins) {

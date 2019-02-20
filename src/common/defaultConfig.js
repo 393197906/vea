@@ -252,4 +252,31 @@ module.exports = {
         },
         message: validateMessage.booleanMessage
     },
+    // 编译目标
+    target: {
+        onlyPlugin: true,
+        defaultValue: "web",
+        validate(value) {
+            return _.isString(value)
+        },
+        message: validateMessage.stringMessge
+    },
+    // output 编译目标
+    libraryTarget: {
+        onlyPlugin: true,
+        defaultValue: "var",
+        validate(value) {
+            return _.isString(value)
+        },
+        message: validateMessage.stringMessge
+    },
+    // 设置node polifill
+    node: {
+        onlyPlugin: true,
+        defaultValue: false,
+        validate(value) {
+            return _.isObject(value)
+        },
+        message: validateMessage.objectMessage
+    },
 };

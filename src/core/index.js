@@ -108,9 +108,9 @@ module.exports = class {
     }
 
     // 执行命令
-    run(name, argv, cb) {
+    run(name, argv, cbObject) {
         assert(_.isPlainObject(this.commonds[name]), "无效的命令")
         const {fn, opts} = this.commonds[name]
-        fn(argv, cb)
+        fn(argv, cbObject)
     }
 };
