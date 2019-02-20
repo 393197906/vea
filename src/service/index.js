@@ -10,10 +10,10 @@ module.exports = class {
 
     // 开启dev服务
     startDev() {
-        process.env.NODE_ENV = 'development'
         const webpackConfig = getWebpackConfig(this.config)
         dev({
             webpackConfig,
+            config: this.config,
             _beforeServerWithApp(app) {
 
             },
@@ -25,15 +25,14 @@ module.exports = class {
             afterServer: (devServer) => {
                 this.build.emit(this.build.events.afterDevServer, devServer)
             },
-            onCompileDone: ({isFirstCompile, stats}) => {
-                this.build.emit(this.build.events.onDevCompileDone, {isFirstCompile, stats})
+            onCompileDone: ({isFirstCompile, stats, server}) => {
+                this.build.emit(this.build.events.onDevCompileDone, {isFirstCompile, stats, server})
             },
         })
     }
 
     // 开启build 服务
     startBuild() {
-        process.env.NODE_ENV = 'production';
         const webpackConfig = getWebpackConfig(this.config);
         build({
             webpackConfig,

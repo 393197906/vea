@@ -279,4 +279,12 @@ module.exports = {
         },
         message: validateMessage.objectMessage
     },
+    // dev自动打开浏览器
+    isOpenBrowser: {
+        defaultValue: true,
+        validate(value) {
+            return _.isBoolean(value)
+        },
+        message: validateMessage.booleanMessage
+    },
 };

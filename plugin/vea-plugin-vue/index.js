@@ -52,9 +52,14 @@ module.exports = ({build, core, deploy}) => {
                 打开master开发环境
                 
                 `.trim()
-    }, (argv) => {
-        process.env.VEA_ENV = "dev" // 全局变量
+    }, (argv, cbObject = {}) => {
+        process.env.VEA_ENV = "dev"; // 全局变量
+        // 执行before钩子
+        if (cbObject.before && typeof cbObject.before === "function") {
+            cbObject.before(build)
+        }
         build.startDev()
+        build.once("onDevCompileDone", cbObject.after)
     });
 
     //  注册build命令

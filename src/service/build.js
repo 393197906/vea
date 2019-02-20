@@ -11,7 +11,7 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 module.exports = function build(opts = {}) {
     const {webpackConfig, cwd = process.cwd(), onSuccess, onFail, config: {clear}} = opts;
-    // console.log(webpackConfig);
+    // console.log(webpackConfig.plugins[2]);
     // return
     assert(webpackConfig, 'webpackConfig should be supplied.');
     assert(isPlainObject(webpackConfig), 'webpackConfig should be plain object.');

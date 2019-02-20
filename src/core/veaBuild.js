@@ -61,7 +61,7 @@ module.exports = class veaBuild extends event {
         assert(_.isPlainObject(fileConfig), "配置必须是一个对象")
         // 验证
         Object.keys(fileConfig).forEach(key => {
-            assert(defaultConfig[key]&&!defaultConfig[key].onlyPlugin,`${key} 只允许插件配置`)
+            assert(defaultConfig[key] && !defaultConfig[key].onlyPlugin, `${key} 只允许插件配置`)
             this._validateConfig(defaultConfig, fileConfig, key)
         });
         this._fileConfig = fileConfig
@@ -117,6 +117,7 @@ module.exports = class veaBuild extends event {
 
     // 开启dev
     startDev() {
+        process.env.NODE_ENV = 'development'
         const config = this._getComplateConfig()
         // console.log(config);
         // return
@@ -127,7 +128,8 @@ module.exports = class veaBuild extends event {
         service.startDev()
     }
 
-    startBuild() {
+    startBuild(NODE_ENV = "production") {
+        process.env.NODE_ENV = NODE_ENV;
         const config = this._getComplateConfig()
         // console.log(config);
         // return
@@ -135,6 +137,6 @@ module.exports = class veaBuild extends event {
             config,
             build: this
         });
-        service.startBuild()
+        service.startBuild(NODE_ENV)
     }
 };
