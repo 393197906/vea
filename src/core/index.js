@@ -7,7 +7,6 @@ const pluginHelp = require("../../plugin/vea-plugin-help/index");
 const pluginVue = require("../../plugin/vea-plugin-vue/index");
 const pluginReact = require("../../plugin/vea-plugin-react/index");
 const pluginInit = require("../../plugin/vea-plugin-init/index");
-const plugin = require("../../packages/vea-plugin-electron/index")
 const assert = require("assert");
 
 module.exports = class {
@@ -92,7 +91,6 @@ module.exports = class {
             : mode === 'react' ?
             pluginReact(this.vea)
             : ""
-        plugin(this.vea)
         this.registerCustomizePlugins()
     }
 
