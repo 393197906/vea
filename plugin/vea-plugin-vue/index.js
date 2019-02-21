@@ -59,7 +59,9 @@ module.exports = ({build, core, deploy}) => {
             cbObject.before(build)
         }
         build.startDev()
-        build.once("onDevCompileDone", cbObject.after)
+        if (cbObject.after && typeof cbObject.after === "function") {
+            build.once("onDevCompileDone", cbObject.after)
+        }
     });
 
     //  注册build命令
@@ -87,7 +89,9 @@ module.exports = ({build, core, deploy}) => {
             cbObject.before(build)
         }
         build.startBuild()
-        build.once("onBuildSuccess", cbObject.after)
+        if (cbObject.after && typeof cbObject.after === "function") {
+            build.once("onBuildSuccess", cbObject.after)
+        }
     });
 
     //  注册deploy命令

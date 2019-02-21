@@ -18,7 +18,7 @@ module.exports = ({build, core, deploy}) => {
                     },
                     "useBuiltIns": "usage"
                 }],
-                [require.resolve('@babel/preset-react'),{
+                [require.resolve('@babel/preset-react'), {
                     development: process.env.NODE_ENV === "development",
                 }]
             ],
@@ -47,9 +47,16 @@ module.exports = ({build, core, deploy}) => {
                 打开master开发环境
                 
                 `.trim()
-    }, (argv) => {
+    }, (argv, cbObject) => {
         process.env.VEA_ENV = "dev" // 全局变量
+        // 执行before钩子
+        if (cbObject.before && typeof cbObject.before === "function") {
+            cbObject.before(build)
+        }
         build.startDev()
+        if (cbObject.after && typeof cbObject.after === "function") {
+            build.once("onDevCompileDone", cbObject.after)
+        }
     });
 
     //  注册build命令
@@ -68,11 +75,18 @@ module.exports = ({build, core, deploy}) => {
                 打包到master环境
                 
                 `.trim()
-    }, (argv) => {
+    }, (argv, cbObject) => {
         const [target = ""] = argv
         process.env.VEA_ENV = target // 全局变量
         build.setOutputPath(path.resolve(process.cwd(), `./dist/${target}`));
+        // 执行before钩子
+        if (cbObject.before && typeof cbObject.before === "function") {
+            cbObject.before(build)
+        }
         build.startBuild()
+        if (cbObject.after && typeof cbObject.after === "function") {
+            build.once("onBuildSuccess", cbObject.after)
+        }
     });
 
     //  注册deploy命令
