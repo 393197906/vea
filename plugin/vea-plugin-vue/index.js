@@ -23,6 +23,7 @@ module.exports = ({build, core, deploy}) => {
             ],
             plugins: [
                 [require.resolve("@babel/plugin-syntax-dynamic-import")],
+                [require.resolve("@babel/plugin-proposal-decorators"), { "legacy": true }],
                 [require.resolve("@babel/plugin-proposal-class-properties")],
                 [require.resolve("babel-plugin-transform-vue-jsx")],
                 [require.resolve("@babel/plugin-transform-runtime"), {
