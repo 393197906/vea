@@ -53,7 +53,8 @@ module.exports = ({build, core, deploy}) => {
                 
                 `.trim()
     }, (argv, cbObject = {}) => {
-        process.env.VEA_ENV = "dev"; // 全局变量
+        const [target = ""] = argv;
+        process.env.VEA_ENV = target || "dev"; // 全局变量
         // 执行before钩子
         if (cbObject.before && typeof cbObject.before === "function") {
             cbObject.before(build)
